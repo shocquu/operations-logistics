@@ -1,271 +1,292 @@
 <script lang="ts">
-    interface Data {
-        activity: string;
-        duration: number;
-        predecessors: string[];
-    }
+    const graph = {
+        A: {
+            name: 'A',
+            duration: 3,
+            dependsOn: [0, 1],
+            predecessors: [],
+            successors: ['C', 'D'],
+        },
+        B: {
+            name: 'B',
+            duration: 7,
+            dependsOn: [0, 2],
+            predecessors: [],
+            successors: ['E', 'G'],
+        },
+        C: {
+            name: 'C',
+            duration: 4,
+            dependsOn: [1, 3],
+            predecessors: ['A'],
+            successors: ['H'],
+        },
+        D: {
+            name: 'D',
+            duration: 2,
+            dependsOn: [1, 4],
+            predecessors: ['A'],
+            successors: ['F'],
+        },
+        E: {
+            name: 'E',
+            duration: 3,
+            dependsOn: [2, 4],
+            predecessors: ['B'],
+            successors: ['F'],
+        },
+        F: {
+            name: 'F',
+            duration: 4,
+            dependsOn: [4, 5],
+            predecessors: ['D', 'E'],
+            successors: ['I'],
+        },
+        G: {
+            name: 'G',
+            duration: 1,
+            dependsOn: [2, 5],
+            predecessors: ['B'],
+            successors: ['I'],
+        },
+        H: {
+            name: 'I',
+            duration: 5,
+            dependsOn: [3, 6],
+            predecessors: ['C'],
+            successors: [],
+        },
+        I: {
+            name: 'I',
+            duration: 3,
+            dependsOn: [5, 6],
+            predecessors: ['F', 'G'],
+            successors: [],
+        },
+        // Dummy: {
+        //     name: 'Dummy',
+        //     duration: -1,
+        //     dependsOn: [3, 5],
+        //     predecessors: ['C'],
+        //     successors: ['I'],
+        // },
+    };
+
+    const graph2 = {
+        A: {
+            duration: 3,
+            dependsOn: [0, 1],
+            predecessors: [],
+            successors: ['B', 'C'],
+        },
+        B: {
+            duration: 4,
+            dependsOn: [1, 2],
+            predecessors: ['A'],
+            successors: ['D'],
+        },
+        C: {
+            duration: 6,
+            dependsOn: [1, 3],
+            predecessors: ['A'],
+            successors: ['G', 'F'],
+        },
+        D: {
+            duration: 7,
+            dependsOn: [2, 4],
+            predecessors: ['B'],
+            successors: ['E'],
+        },
+        E: {
+            duration: 1,
+            dependsOn: [4, 6],
+            predecessors: ['D'],
+            successors: ['I'],
+        },
+        F: {
+            duration: 2,
+            dependsOn: [3, 6],
+            predecessors: ['C'],
+            successors: ['I'],
+        },
+        G: {
+            duration: 3,
+            dependsOn: [3, 5],
+            predecessors: ['C'],
+            successors: ['H'],
+        },
+        H: {
+            duration: 4,
+            dependsOn: [5, 6],
+            predecessors: ['G'],
+            successors: ['I'],
+        },
+        I: {
+            duration: 1,
+            dependsOn: [6, 7],
+            predecessors: ['E', 'F', 'H'],
+            successors: ['J'],
+        },
+        J: {
+            duration: 2,
+            dependsOn: [7, 8],
+            predecessors: ['I'],
+            successors: [],
+        },
+    };
+
+    const values = Object.values(graph);
+    const nodeDependencies = [];
+    values.forEach((val) =>
+        val.dependsOn.forEach((v) => {
+            nodeDependencies.push(v);
+        })
+    );
+    const max = Math.max(...nodeDependencies);
 
     interface Node {
         id: number;
-        ect: number; // earliest completion time
-        lct: number; // latest completion time
+        eft: number;
+        lft: number;
         spare: number;
     }
 
-    const nodes: Node[] = [
-        { id: 2, ect: 3, lct: 3, spare: 0 },
-        { id: 3, ect: 7, lct: 8, spare: 1 },
-        { id: 4, ect: 9, lct: 9, spare: 0 },
-        { id: 5, ect: 14, lct: 15, spare: 1 },
-        { id: 6, ect: 16, lct: 16, spare: 0 },
-        { id: 7, ect: 12, lct: 12, spare: 0 },
-        { id: 8, ect: 17, lct: 17, spare: 0 },
-        { id: 9, ect: 19, lct: 19, spare: 0 },
-    ];
+    let nodes: Node[];
+    nodes = Array.from(Array(max + 1), (_, id) => ({
+        id,
+        eft: 0, // early finish time
+        lft: 0, // late finish time
+        spare: 0,
+    }));
 
-    const node: Node = { id: 0, ect: 0, lct: 0, spare: 0 };
+    const criticalPath = [];
 
-    const data2 = [
-        {
-            activity: { A: { id: 0, ect: 0, lct: 0, spare: 0 } },
-            duration: 3,
-            predecessors: [],
-        },
-        {
-            activity: { B: { id: 0, ect: 0, lct: 0, spare: 0 } },
-            duration: 4,
-            predecessors: ['A'],
-        },
-        {
-            activity: { C: { id: 0, ect: 0, lct: 0, spare: 0 } },
-            duration: 6,
-            predecessors: ['A'],
-        },
-        {
-            activity: { D: { id: 0, ect: 0, lct: 0, spare: 0 } },
-            duration: 7,
-            predecessors: ['B'],
-        },
-        {
-            activity: { E: { id: 0, ect: 0, lct: 0, spare: 0 } },
-            duration: 1,
-            predecessors: ['D', 'C', 'G'],
-        },
-        {
-            activity: { F: { id: 0, ect: 0, lct: 0, spare: 0 } },
-            duration: 1,
-            predecessors: ['E'],
-        },
-        {
-            activity: { G: { id: 0, ect: 0, lct: 0, spare: 0 } },
-            duration: 2,
-            predecessors: ['F'],
-        },
-    ];
+    const goForward = (graph) => {
+        const paths = Object.keys(graph);
 
-    const data1 = [
-        {
-            activity: 'A',
-            duration: 3,
-            predecessors: [],
-        },
-        {
-            activity: 'B',
-            duration: 4,
-            predecessors: ['A'],
-        },
-        {
-            activity: 'C',
-            duration: 6,
-            predecessors: ['A'],
-        },
-        {
-            activity: 'D',
-            duration: 7,
-            predecessors: ['B'],
-        },
-        {
-            activity: 'E',
-            duration: 1,
-            predecessors: ['D', 'C', 'G'],
-        },
-        {
-            activity: 'F',
-            duration: 1,
-            predecessors: ['E'],
-        },
-        {
-            activity: 'G',
-            duration: 2,
-            predecessors: ['F'],
-        },
-    ];
+        paths.forEach((path) => {
+            const { duration, dependsOn, predecessors } = graph[path];
+            const [from, to] = dependsOn;
 
-    const data3 = [
-        {
-            activity: 'A',
-            duration: 3,
-            nodes: [
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-            ],
-        },
-        {
-            activity: 'B',
-            duration: 4,
-            nodes: [
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-            ],
-        },
-        {
-            activity: 'C',
-            duration: 6,
-            nodes: [
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-            ],
-        },
-        {
-            activity: 'D',
-            duration: 7,
-            nodes: [
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-            ],
-        },
-        {
-            activity: 'E',
-            duration: 1,
-            nodes: [
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-            ],
-        },
-        {
-            activity: 'F',
-            duration: 2,
-            nodes: [
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-            ],
-        },
-        {
-            activity: 'A',
-            duration: 3,
-            nodes: [
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-            ],
-        },
-        {
-            activity: 'A',
-            duration: 3,
-            nodes: [
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-            ],
-        },
-        {
-            activity: 'A',
-            duration: 3,
-            nodes: [
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-            ],
-        },
-        {
-            activity: 'A',
-            duration: 3,
-            nodes: [
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-                { id: 0, ect: 0, lct: 0, spare: 0 },
-            ],
-        },
-    ];
+            if (predecessors.length > 1) {
+                const pre = predecessors.map((pre) => graph[pre]);
+                const max = pre.reduce((prev, current) => {
+                    const nodeA = nodes[prev.dependsOn[0]];
+                    const nodeB = nodes[current.dependsOn[0]];
 
-    data3.map((node) => {
-        //
-    });
+                    // t(j)^0 = max{t(i)^0 + t(i-j), i < j}
+                    return nodeA.eft + prev.duration >
+                        nodeB.eft + current.duration
+                        ? prev
+                        : current;
+                });
 
-    const data = [
-        {
-            activity: { A: { id: 0, ect: 0, lct: 0, spare: 0 } },
-            duration: 0,
-            predecessors: [],
-        },
-        {
-            activity: { B: { id: 0, ect: 0, lct: 0, spare: 0 } },
-            duration: 4,
-            predecessors: ['A'],
-        },
-        {
-            activity: { C: { id: 0, ect: 0, lct: 0, spare: 0 } },
-            duration: 6,
-            predecessors: ['A'],
-        },
-        {
-            activity: { D: { id: 0, ect: 0, lct: 0, spare: 0 } },
-            duration: 7,
-            predecessors: ['B'],
-        },
-        {
-            activity: { E: { id: 0, ect: 0, lct: 0, spare: 0 } },
-            duration: 1,
-            predecessors: ['D', 'C', 'G'],
-        },
-        {
-            activity: { F: { id: 0, ect: 0, lct: 0, spare: 0 } },
-            duration: 1,
-            predecessors: ['E'],
-        },
-        {
-            activity: { G: { id: 0, ect: 0, lct: 0, spare: 0 } },
-            duration: 2,
-            predecessors: ['F'],
-        },
-    ];
+                const [start, end] = max.dependsOn;
+                nodes[end].eft = nodes[start].eft + max.duration;
+            }
 
-    const hm = { A: 0, B: 1, C: 2, D: 3, E: 4, F: 5, G: 6, H: 7, I: 8, J: 9 };
+            nodes[to].eft = nodes[from].eft + duration;
 
-    const hashMap = {
-        A: { id: 1, ect: 0, lct: 0, spare: 0 },
-        B: { id: 2, ect: 0, lct: 0, spare: 0 },
-        C: { id: 3, ect: 0, lct: 0, spare: 0 },
-        D: { id: 4, ect: 0, lct: 0, spare: 0 },
-        E: { id: 5, ect: 0, lct: 0, spare: 0 },
-        F: { id: 6, ect: 0, lct: 0, spare: 0 },
-        G: { id: 7, ect: 0, lct: 0, spare: 0 },
-        H: { id: 8, ect: 0, lct: 0, spare: 0 },
+            // console.log(
+            //     `${nodes[from].id}/${nodes[from].eft} ==${path}(${duration})==> ${nodes[to].id}/${nodes[to].eft}`
+            // );
+        });
     };
 
-    // const result = data2.map((a, i) => {
-    //     const duration = a.duration;
-    //     const predecessors = a.predecessors;
-    //     const key = Object.keys(a.activity)[0];
-    //     //const key = a.activity;
-    //     let { id, ect, lct, spare } = a.activity[key];
+    const goBackward = (graph) => {
+        const paths = Object.keys(graph);
+        const lastItem = graph[paths[paths.length - 1]];
+        const lastNode = nodes[lastItem.dependsOn[1]];
+        lastNode.lft = lastNode.eft;
 
-    //     id = i + 2;
-    //     //ect = duration;
-    //     ect = duration;
+        paths
+            .slice()
+            .reverse()
+            .forEach((path, i) => {
+                const { duration, dependsOn, successors } = graph[path];
+                const [from, to] = dependsOn;
 
-    //     if (predecessors.length > 1) {
-    //         const ects = predecessors.map((pre) => data[hm[pre]]);
-    //         // const max = Math.max(...ects);
-    //         // const appendKey = ects.indexOf(max);
+                if (successors.length > 1) {
+                    const next = successors.map((next) => graph[next]);
+                    const min = next.reduce((prev, current) => {
+                        const nodeA = nodes[prev.dependsOn[0]];
+                        const nodeB = nodes[current.dependsOn[0]];
 
-    //         console.log(key, ects);
+                        // t(j)^1 = min{t(j)^1 - t(i-j), j < i}
+                        return nodeA.lft - prev.duration >
+                            nodeB.lft - current.duration
+                            ? current
+                            : prev;
+                    });
 
-    //         // console.log(
-    //         //     ` => ${key}: ${id} ${hashMap[key].ect} ${lct} ${spare}`
-    //         // );
-    //     } else {
-    //         console.log(`- => ${key}: ${id} ${ect} ${lct} ${spare}`);
-    //     }
-    // });
+                    const [start, end] = min.dependsOn;
+                    nodes[start].lft = nodes[end].lft - min.duration;
+                }
+
+                nodes[from].lft = nodes[to].lft - duration;
+                nodes[from].spare = nodes[from].lft - nodes[from].eft;
+                nodes[to].spare = nodes[to].lft - nodes[to].eft;
+
+                // console.log(
+                //     `${nodes[to].id}/${nodes[to].eft}/${nodes[to].lft}/${nodes[to].spare} ==${path}(${duration})==> ${nodes[from].id}/${nodes[from].eft}/${nodes[from].lft}/${nodes[from].spare}`
+                // );
+            });
+    };
+
+    const getWeightMap = () => {
+        const map = [
+            { 0: [{ to: 1, weight: 2 }] },
+            { 1: [{ to: 1, weight: 2 }] },
+        ];
+    };
+
+    const getCriticalPath = () => {
+        const entry = Object.keys(graph)[0];
+        const { successors } = graph[entry];
+        const criticalPath = [];
+
+        if (successors.length > 0) {
+            const durations = successors.map((next) => graph[next].duration);
+            const nextActivities = successors.map(
+                (next) => graph[next].successors
+            );
+
+            const maxIndex = durations.indexOf(Math.max(...durations));
+            const n = successors[maxIndex];
+            console.log(successors, maxIndex, n);
+
+            // return Object.keys(graph).find((key) => graph[key] === max);
+        }
+    };
+
+    goForward(graph);
+    goBackward(graph);
+    // getCriticalPath();
+
+    console.log(criticalPath);
 </script>
 
+<div id="container" />
+<div>
+    {#each nodes as { id, eft, lft, spare }}
+        <section
+            class="w-16 h-16 grid grid-rows-2 grid-flow-col gap-px border-2 border-blue-600 rounded-full overflow-hidden bg-black text-center leading-7 rotate-45 font-bold"
+        >
+            <article class="bg-gray-100">
+                <p class="-rotate-45 translate-y-1 translate-x-1">{id}</p>
+            </article>
+            <article class="bg-gray-100">
+                <p class="-rotate-45 -translate-y-1 translate-x-1">{eft}</p>
+            </article>
+            <article class="bg-gray-100">
+                <p class="-rotate-45 translate-y-1 -translate-x-1">{lft}</p>
+            </article>
+            <article class="bg-gray-100">
+                <p class="-rotate-45 -translate-y-1 -translate-x-1">{spare}</p>
+            </article>
+        </section>
+    {/each}
+</div>
 <div class="table w-full">
     <div class="table-header-group">
         <div class="table-row">
@@ -275,7 +296,7 @@
         </div>
     </div>
     <div class="table-row-group">
-        {#each data as { activity, duration, predecessors }}
+        {#each Object.entries(graph) as [activity, { duration, predecessors }]}
             <div class="table-row">
                 <div class="table-cell">
                     {activity}
