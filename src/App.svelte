@@ -170,8 +170,6 @@
         spare: 0,
     }));
 
-    const criticalPath = [];
-
     const goForward = (graph) => {
         const paths = Object.keys(graph);
 
@@ -267,8 +265,6 @@
         }
     };
 
-    const paths = [[{}]];
-
     const getCrit = () => {
         const activities = Object.keys($graph);
 
@@ -297,35 +293,9 @@
         // console.log(adjList);
     };
 
-    function* dfs(first) {
-        const visited = new Map();
-        const visitList = [];
-
-        visitList.push(first);
-
-        while (visitList.length > 0) {
-            // const node = visitList.shift();
-            const node = visitList.slice(1);
-
-            console.log(visited);
-
-            if (node && !visited.has(node)) {
-                yield node;
-                visited.set(node, true);
-                //node.getAdjacents().forEach((adj) => visitList.add(adj));
-            }
-        }
-    }
-
     goForward($graph);
     goBackward($graph);
     getCrit();
-
-    const result = dfs(nodes[0]);
-    console.log(result.next().value);
-    console.log(result.next().value);
-
-    // getCriticalPath();
 
     // console.log(criticalPath);
 </script>

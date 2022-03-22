@@ -1,15 +1,37 @@
 import Node from './node';
 
-class Graph {
-    nodes;
-    graph;
+const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
-    constructor(duration, predecessors) {
+class Graph {
+    duration;
+    dependsOn = [];
+    predecessors = [];
+    successors = [];
+    map: {};
+
+    static _letter: any;
+
+    constructor(map) {
+        this.map = map;
+    }
+
+    goForward() {
         //
     }
-}
 
-Graph.UNDIRECTED = Symbol('directed graph'); // two-ways edges
-Graph.DIRECTED = Symbol('undirected graph'); // one-way edges
+    addEdge(duration, predecessors) {
+        const activity = Graph.counter;
+        this.map[activity] = {};
+    }
+
+    addNode() {
+        //
+    }
+
+    static get counter() {
+        Graph._letter = alphabet[(Graph._letter || 0) + 1];
+        return Graph._letter;
+    }
+}
 
 export default Graph;

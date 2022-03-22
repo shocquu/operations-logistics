@@ -1,6 +1,7 @@
 <script lang="ts">
     import LeaderLine from 'leader-line';
     import { onMount } from 'svelte';
+    import { graph } from '../stores/graph.store';
 
     export let nodes, adjList;
 
@@ -8,21 +9,30 @@
 
     onMount(() => {
         Object.entries(adjList).forEach(([a, b]: [string, number[]]) => {
+            const activities = Object.keys($graph);
+
+            const label = activities[a];
+            const { duration } = $graph[label];
+
             nodeIds.push(a);
-            b.forEach(
-                (end) =>
-                    new LeaderLine(nodeIds[a], nodeIds[end], {
-                        color: '#0064c8',
-                        // dash: true, // for dummy lines
-                        // endLabel: 'A',
-                    })
-            );
+            b.forEach((end) => {
+                new LeaderLine(nodeIds[a], nodeIds[end], {
+                    color: '#0064c8',
+                    endLabel: `${label} (${duration})`,
+                    // dash: true, // for dummy lines
+                });
+                console.log(nodeIds[a], nodeIds[end]);
+            });
         });
+        console.log(adjList);
     });
 </script>
 
 <h1 class="text-2xl font-black">PERT Chart</h1>
 <div class="flex gap-10 border px-4">
+    {#each Object.entries(adjList) as [key, val]}
+        {`[${key}] {${val}} `}
+    {/each}
     {#each nodes as { id, eft, lft, spare }}
         <div bind:this={nodeIds[id]}>
             <section
