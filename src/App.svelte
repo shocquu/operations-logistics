@@ -1,6 +1,7 @@
 <script lang="ts">
     import { Nav, Table, PertChart } from './components';
     import { graph } from './stores/graph.store';
+    import Graph from './utils/graph';
 
     const graph3 = {
         A: {
@@ -296,6 +297,20 @@
     goForward($graph);
     goBackward($graph);
     getCrit();
+
+    const graphi = new Graph();
+    graphi.addEdge(0, 1, 3, 'A');
+    graphi.addEdge(0, 2, 7, 'B');
+    graphi.addEdge(1, 3, 4, 'C');
+    graphi.addEdge(1, 4, 2, 'D');
+    graphi.addEdge(2, 4, 3, 'E');
+    graphi.addEdge(2, 5, 1, 'G');
+    graphi.addEdge(3, 5, 0, 'Dummy');
+    graphi.addEdge(3, 6, 5, 'H');
+    graphi.addEdge(4, 5, 4, 'F');
+    graphi.addEdge(5, 6, 3, 'I');
+
+    graphi.goForward();
 
     // console.log(criticalPath);
 </script>

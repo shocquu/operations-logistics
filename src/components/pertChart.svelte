@@ -21,10 +21,10 @@
                     endLabel: `${label} (${duration})`,
                     // dash: true, // for dummy lines
                 });
-                console.log(nodeIds[a], nodeIds[end]);
+                // console.log(nodeIds[a], nodeIds[end]);
             });
         });
-        console.log(adjList);
+        // console.log(adjList);
     });
 </script>
 
