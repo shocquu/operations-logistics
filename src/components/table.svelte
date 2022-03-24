@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { graph } from '../stores/graph.store';
+    import { graphStore } from '../stores/graph.store';
 
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
-    $: letter = alphabet[Object.keys($graph).length];
+    $: letter = alphabet[Object.keys($graphStore).length];
     $: error = false;
     let duration, predecessors;
 
@@ -20,7 +20,7 @@
             .split(/[, ]+/)
             .map((letter) => letter.toLocaleUpperCase());
 
-        $graph[letter] = {
+        $graphStore[letter] = {
             duration,
             predecessors,
         };
@@ -38,7 +38,7 @@
         </div>
     </div>
     <div class="table-row-group">
-        {#each Object.entries($graph) as [activity, { duration, predecessors }]}
+        {#each Object.entries($graphStore) as [activity, { duration, predecessors }]}
             <div class="table-row">
                 <div class="table-cell">
                     {activity}

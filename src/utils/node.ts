@@ -15,6 +15,14 @@ class Node {
         this.predecessors = [];
     }
 
+    get getAdjacents() {
+        return this.adjList;
+    }
+
+    get getPredecessors() {
+        return this.predecessors;
+    }
+
     addPredecessor(node) {
         this.predecessors.push(node);
     }
@@ -29,10 +37,6 @@ class Node {
             this.adjList.splice(index, 1);
             return node;
         }
-    }
-
-    getAdjacents() {
-        return this.adjList;
     }
 
     isAdjacent(node) {

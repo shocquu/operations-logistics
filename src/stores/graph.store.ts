@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-export const graph = writable({
+export const graphStore = writable({
     A: {
         name: 'A',
         duration: 3,

@@ -1,35 +1,36 @@
 <script lang="ts">
     import LeaderLine from 'leader-line';
     import { onMount } from 'svelte';
-    import { graph } from '../stores/graph.store';
+    import { graphStore } from '../stores/graph.store';
 
-    export let nodes, adjList;
-
-    let nodeIds = [];
+    export let graph;
 
     onMount(() => {
-        Object.entries(adjList).forEach(([a, b]: [string, number[]]) => {
-            const activities = Object.keys($graph);
+        //console.log(graph.getAdjacentsList);
+        const adjList = graph.getAdjacentsList;
 
-            const label = activities[a];
-            const { duration } = $graph[label];
-
-            nodeIds.push(a);
-            b.forEach((end) => {
-                new LeaderLine(nodeIds[a], nodeIds[end], {
-                    color: '#0064c8',
-                    endLabel: `${label} (${duration})`,
-                    // dash: true, // for dummy lines
-                });
-                // console.log(nodeIds[a], nodeIds[end]);
-            });
+        adjList.forEach((node) => {
+            console.log(node);
         });
-        // console.log(adjList);
+
+        // Object.entries(adjList).forEach(([a, b]: [string, number[]]) => {
+        //     const activities = Object.keys($graphStore);
+        //     const label = activities[a];
+        //     const { duration } = $graphStore[label];
+        //     nodeIds.push(a);
+        //     b.forEach((end) => {
+        //         new LeaderLine(nodeIds[a], nodeIds[end], {
+        //             color: '#0064c8',
+        //             endLabel: `${label} (${duration})`,
+        //             // dash: true, // for dummy lines
+        //         });
+        //     });
+        // });
     });
 </script>
 
 <h1 class="text-2xl font-black">PERT Chart</h1>
-<div class="flex gap-10 border px-4">
+<!-- <div class="flex gap-10 border px-4">
     {#each Object.entries(adjList) as [key, val]}
         {`[${key}] {${val}} `}
     {/each}
@@ -56,4 +57,4 @@
             </section>
         </div>
     {/each}
-</div>
+</div> -->
