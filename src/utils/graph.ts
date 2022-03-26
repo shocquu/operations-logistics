@@ -129,7 +129,11 @@ class Graph {
         } else {
             const vertex = new Node(id);
             this.nodes.set(id, vertex);
+
+            // Keep in order for successful pathfinding
+            this.nodes = new Map([...this.nodes.entries()].sort());
             this.adjList[id] = [];
+
             return vertex;
         }
     }
