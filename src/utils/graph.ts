@@ -1,3 +1,4 @@
+import { get } from 'svelte/store';
 import Node from './node';
 
 class Graph {
@@ -43,7 +44,7 @@ class Graph {
 
         for (let i = this.nodes.size - 1; i >= 0; i--) {
             const node = this.nodes.get(i);
-            const nodeAdjacents = node.getAdjacents;
+            const nodeAdjacents = node?.getAdjacents;
 
             if (nodeAdjacents.length > 1) {
                 const min = nodeAdjacents.reduce((prev, current) => {
@@ -65,16 +66,21 @@ class Graph {
     }
 
     *findCriticalPath() {
+        this.goForward();
+        this.goBackward();
+
         const visited = new Map();
         const criticalPath = [];
         const firstList = this.adjList[0];
 
-        const firstNode = firstList.reduce((prev, current) => {
-            return prev.node.lft - prev.weight <
-                current.node.lft - current.weight
-                ? prev
-                : current;
-        });
+        const firstNode =
+            firstList &&
+            firstList.reduce((prev, current) => {
+                return prev.node.lft - prev.weight <
+                    current.node.lft - current.weight
+                    ? prev
+                    : current;
+            });
 
         criticalPath.push(firstNode);
 
@@ -106,7 +112,6 @@ class Graph {
 
         sourceNode.addAdjacent({ node: destinationNode, weight, name });
         destinationNode.addPredecessor({ node: sourceNode, weight, name });
-
         this.adjList[src].push({ node: destinationNode, weight, name });
 
         return [sourceNode, destinationNode];
@@ -145,7 +150,6 @@ class Graph {
                 node.removeAdjacent(current);
             }
         }
-        return this.nodes.delete(id);
     }
 }
 

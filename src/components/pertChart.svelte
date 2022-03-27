@@ -1,14 +1,14 @@
 <script lang="ts">
     import LeaderLine from 'leader-line';
-    import { onMount } from 'svelte';
+    import { onDestroy } from 'svelte';
+    import { graphStore } from '../stores/graph.store';
 
-    export let graph;
     const nodesIds = [];
     let nodes = [];
 
-    onMount(() => {
-        const adjList = graph.getAdjacentsList;
-        nodes = [...graph.getNodes.values()];
+    const unsubscribe = graphStore.subscribe(() => {
+        const adjList = $graphStore.getAdjacentsList;
+        nodes = [...$graphStore.getNodes.values()];
 
         Object.entries(adjList).forEach(([start, adj]: [string, any[]]) => {
             nodesIds.push(start);
@@ -40,6 +40,8 @@
         //     });
         // });
     });
+
+    onDestroy(unsubscribe);
 </script>
 
 <div class="overflow-x-auto shadow-md sm:rounded-lg bg-white">

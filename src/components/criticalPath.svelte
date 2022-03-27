@@ -1,7 +1,7 @@
 <script lang="ts">
-    export let path;
+    import { criticalPath } from '../stores/graph.store';
 
-    const total = path.reduce((a, b) => a + b.weight, 0);
+    $: total = $criticalPath.reduce((a, b) => a + b.weight, 0);
 </script>
 
 <div class="overflow-x-auto shadow-md sm:rounded-lg bg-white">
@@ -19,7 +19,7 @@
                     >
                 </div>
             </li>
-            {#each path as { name }}
+            {#each $criticalPath as { name }}
                 <li>
                     <div class="flex items-center">
                         <svg

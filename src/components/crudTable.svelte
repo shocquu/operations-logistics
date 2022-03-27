@@ -1,60 +1,131 @@
 <script lang="ts">
     import { flip } from 'svelte/animate';
+    import { object_without_properties } from 'svelte/internal';
     import { fade, fly } from 'svelte/transition';
-    import { Dropdown } from '../components';
+    import { graphStore, criticalPath } from '../stores/graph.store';
+    import Graph from '../utils/graph';
+    import Dropdown from './dropdown.svelte';
 
     let data;
     let error = false;
     let editMode = false;
-
+    let nextId = 1,
+        prevId = 0;
+    const graph = new Graph();
     const columns = ['Activity', 'Duration', 'Immediate Predecessor(s)'];
-    const inputs = [
-        {
-            placeholder: 'Activity name',
-            editable: false,
-            size: 'w-11',
-            key: 'activity',
-        },
-        {
-            placeholder: 'Duration',
-            editable: true,
-            size: 'w-24',
-            key: 'duration',
-        },
-    ];
 
     $: data = [
-        { activity: 'A', duration: '3', predecessors: [] },
-        { activity: 'B', duration: '7', predecessors: ['A'] },
-        { activity: 'C', duration: '7', predecessors: ['A', 'B'] },
+        // { id: 0, activity: 'A', duration: '3', predecessors: [] },
+        // { id: 1, activity: 'B', duration: '7', predecessors: ['A'] },
+        // { id: 2, activity: 'C', duration: '7', predecessors: ['A', 'B'] },
     ];
     const inputValues = { activity: '', duration: '', predecessors: [] };
     let checkedValues;
 
     const addRow = () => {
+        if (!validateInput()) return;
+
         const { activity, duration } = inputValues;
         const predecessors = Object.keys(checkedValues)
             .filter((key) => checkedValues[key] === true)
             .sort();
 
-        if (
-            !Number.isInteger(parseInt(duration)) ||
-            typeof activity !== 'string'
-        ) {
-            error = true;
-            return;
+        let dependencies = [];
+
+        if (predecessors.length > 0) {
+            let min = Infinity,
+                max = 0;
+            predecessors.forEach((pre) => {
+                const row = data.find((row) => row.activity === pre);
+
+                row.dependsOn.forEach((dep) => {
+                    const [from, to] = dep;
+
+                    if (to < min) min = to;
+                    if (to > max) max = to;
+                });
+
+                // graph.adjList[max] = [];
+                // graph.addEdge(from, min, parseInt(row.duration), row.activity);
+                //
+                //
+
+                // row.dependsOn.forEach((dep) => {
+                //     dep = [0, min];
+                // });
+
+                // const { dependsOn } = data.find((row) => row.activity === pre);
+                // let from = dependsOn[0][1];
+                // let to = nextId;
+                // dependencies.push([from, to]);
+
+                // let min = Infinity,
+                //     max = 0;
+
+                // if (from < min) min = from;
+                // if (from > max) max = from;
+
+                // if (dependencies.length > 1) {
+                //     const nextNode = graph.nodes.get(nextId);
+                //     const node = graph.nodes.get(max);
+
+                //     nextId = max;
+                //     nextNode.id = nextId;
+                //     node.id = min;
+                //     // graph.adjList = graph.adjList.slice(0, max);
+                //     graph.adjList[max] = [];
+
+                //     dependencies = [[min, max]];
+                //     // nextId++;
+
+                //     console.log(nextId);
+
+                //     return;
+                // }
+
+                // console.log('nextId: ', nextId, from);
+                // graph.addEdge(from, nextId, parseInt(duration), activity);
+            });
+
+            // const nextNode = graph.nodes.get(nextId);
+            // const maxNode = graph.nodes.get(max);
+            // const minNode = graph.nodes.get(min);
+
+            // maxNode.id = min;
+
+            // const [src, dst] = graph.addEdge(
+            //     min,
+            //     max,
+            //     parseInt(duration),
+            //     activity
+            // );
+
+            console.log(graph.getAdjacentsList, prevId, nextId);
+            graph.addEdge(prevId, nextId, parseInt(duration), activity);
+
+            // console.log(dependencies);
+        } else {
+            dependencies = [[0, nextId]];
+            graph.addEdge(0, nextId, parseInt(duration), activity);
         }
 
-        const maxLenghth = 20;
+        const maxTextLength = 20;
         const row = {
-            activity: activity.slice(0, maxLenghth),
+            dependsOn: dependencies,
+            activity: activity.slice(0, maxTextLength),
             duration,
             predecessors,
         };
         data = [...data, { ...row }];
+        prevId = nextId;
+        nextId++;
 
         // Reset inputs
         inputValues.activity = inputValues.duration = null;
+
+        // Update store
+        $graphStore = graph;
+        $criticalPath = Array.from(graph.findCriticalPath());
     };
 
     const deleteRow = (activity: string) => {
@@ -63,8 +134,11 @@
         for (let i = 0; i < data.length; i++) {
             if (data[i].activity != activity) {
                 if (data[i].predecessors.length > 0) {
+                    // @TODO remove from predecessors ids from dependencies
                     data[i].predecessors = data[i].predecessors.filter(
-                        (pre) => pre != activity
+                        (pre) => {
+                            return pre != activity;
+                        }
                     );
                 }
 
@@ -73,6 +147,21 @@
         }
 
         data = newData;
+    };
+
+    const validateInput = () => {
+        const { activity, duration } = inputValues;
+
+        if (
+            !Number.isInteger(parseInt(duration)) ||
+            typeof activity !== 'string'
+        ) {
+            error = true;
+            return false;
+        }
+
+        error = false;
+        return true;
     };
 
     const getAvailablePredecessors = (name?: string): string[] => {
@@ -97,15 +186,30 @@
     <h1 class="text-2xl font-black px-4 pt-2 ">Activities</h1>
     <!-- User Input -->
     <div class="flex gap-4 p-4 w-1/2">
-        {#each inputs as { placeholder, editable, size, key }, i}
+        <!-- {#each inputs as { placeholder, type, editable, size, key }, i}
             <input
                 type="text"
                 bind:value={inputValues[key]}
                 {placeholder}
                 contenteditable={editable}
-                class={`${size} flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                class={`${size} flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
             />
-        {/each}
+        {/each} -->
+        <input
+            type="text"
+            bind:value={inputValues.activity}
+            contenteditable={true}
+            placeholder="Activity name"
+            class="w-24 flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        />
+        <input
+            min="0"
+            type="number"
+            bind:value={inputValues.duration}
+            contenteditable={true}
+            placeholder="Duration"
+            class="w-24 flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        />
         <Dropdown
             size="w-full"
             getOptions={data && getAvailablePredecessors}
@@ -143,6 +247,7 @@
                 {/each}
             </tr>
         </thead>
+
         <!-- Rows -->
         <tbody>
             {#each data as { activity, duration, predecessors }, id (activity)}
@@ -150,7 +255,7 @@
                     animate:flip
                     in:fade
                     out:fly={{ x: 100 }}
-                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 group"
+                    class="relative bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 group"
                 >
                     <th
                         scope="row"
@@ -188,8 +293,11 @@
                                     : '-'}</span
                             >
                         {/if}
-                    </td><td
-                        class="px-6 py-4 flex justify-center align-center gap-2 transition-opacity opacity-0 group-hover:opacity-100"
+                    </td>
+
+                    <!-- Icons -->
+                    <div
+                        class="absolute right-0 px-6 py-4 flex justify-center align-center gap-2 transition-opacity opacity-0 group-hover:opacity-100"
                     >
                         <button class="border-0">
                             <svg
@@ -225,13 +333,18 @@
                                 /></svg
                             ></button
                         >
-                    </td>
+                    </div>
                 </tr>
             {:else}
-                <p class="text-lg text-center py-5">
-                    You haven't set any activities yet. Add new data and they
-                    will appear here.
-                </p>
+                <tr>
+                    <td
+                        colspan={columns.length}
+                        class="md:text-2xl sm:text-sm font-medium text-center py-10"
+                    >
+                        You haven't added any activities yet. Use the form above
+                        to add new records.
+                    </td>
+                </tr>
             {/each}
         </tbody>
     </table>
