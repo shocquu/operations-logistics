@@ -9,7 +9,7 @@
     let data;
     let error = false;
     let editMode = false;
-    let nextId = 1,
+    let nextId = 0,
         prevId = 0;
     const graph = new Graph();
     const columns = ['Activity', 'Duration', 'Immediate Predecessor(s)'];
@@ -33,79 +33,33 @@
         let dependencies = [];
 
         if (predecessors.length > 0) {
-            let min = Infinity,
-                max = 0;
+            let min = Infinity;
+
             predecessors.forEach((pre) => {
-                const row = data.find((row) => row.activity === pre);
+                const d = data.find((row) => row.activity === pre);
+                const [a, b] = d.dependsOn[0];
 
-                row.dependsOn.forEach((dep) => {
-                    const [from, to] = dep;
+                // console.log(activity, a, b);
+                if (b < min) min = b;
+                prevId = min;
+                // nextId++;
 
-                    if (to < min) min = to;
-                    if (to > max) max = to;
-                });
+                console.log(d.activity, activity, min, prevId, nextId);
+                d.dependsOn[1] = [a, min];
 
-                // graph.adjList[max] = [];
-                // graph.addEdge(from, min, parseInt(row.duration), row.activity);
-                //
-                //
-
-                // row.dependsOn.forEach((dep) => {
-                //     dep = [0, min];
-                // });
-
-                // const { dependsOn } = data.find((row) => row.activity === pre);
-                // let from = dependsOn[0][1];
-                // let to = nextId;
-                // dependencies.push([from, to]);
-
-                // let min = Infinity,
-                //     max = 0;
-
-                // if (from < min) min = from;
-                // if (from > max) max = from;
-
-                // if (dependencies.length > 1) {
-                //     const nextNode = graph.nodes.get(nextId);
-                //     const node = graph.nodes.get(max);
-
-                //     nextId = max;
-                //     nextNode.id = nextId;
-                //     node.id = min;
-                //     // graph.adjList = graph.adjList.slice(0, max);
-                //     graph.adjList[max] = [];
-
-                //     dependencies = [[min, max]];
-                //     // nextId++;
-
-                //     console.log(nextId);
-
-                //     return;
-                // }
-
-                // console.log('nextId: ', nextId, from);
-                // graph.addEdge(from, nextId, parseInt(duration), activity);
+                // console.log(activity, d.activity);
             });
-
-            // const nextNode = graph.nodes.get(nextId);
-            // const maxNode = graph.nodes.get(max);
-            // const minNode = graph.nodes.get(min);
-
-            // maxNode.id = min;
-
-            // const [src, dst] = graph.addEdge(
-            //     min,
-            //     max,
-            //     parseInt(duration),
-            //     activity
-            // );
-
-            console.log(graph.getAdjacentsList, prevId, nextId);
+            // console.log(activity, '=>', prevId, nextId);
+            nextId++;
+            // prevId--;
+            dependencies = [[prevId, nextId]];
             graph.addEdge(prevId, nextId, parseInt(duration), activity);
 
             // console.log(dependencies);
         } else {
-            dependencies = [[0, nextId]];
+            prevId = 0;
+            nextId++;
+            dependencies = [[prevId, nextId]];
             graph.addEdge(0, nextId, parseInt(duration), activity);
         }
 
@@ -117,8 +71,8 @@
             predecessors,
         };
         data = [...data, { ...row }];
-        prevId = nextId;
-        nextId++;
+
+        // console.log(activity, prevId, nextId);
 
         // Reset inputs
         inputValues.activity = inputValues.duration = null;

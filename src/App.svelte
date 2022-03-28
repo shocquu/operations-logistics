@@ -3,7 +3,7 @@
     import { graphStore } from './stores/graph.store';
     import Graph from './utils/graph';
 
-    // $: graphStore && console.log($graphStore.getAdjacentsList);
+    $: graphStore && console.log($graphStore.getAdjacentsList);
 
     const graph = new Graph();
 
