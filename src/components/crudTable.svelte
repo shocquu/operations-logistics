@@ -1,68 +1,47 @@
 <script lang="ts">
     import { flip } from 'svelte/animate';
-    import { object_without_properties } from 'svelte/internal';
     import { fade, fly } from 'svelte/transition';
     import { graphStore, criticalPath } from '../stores/graph.store';
     import Graph from '../utils/graph';
     import Dropdown from './dropdown.svelte';
+    import Error from './error.svelte';
 
-    let data;
-    let error = false;
+    type Error = {
+        isValid: boolean;
+        message: string;
+    };
+
+    let data = [];
     let editMode = false;
-    let nextId = 0,
-        prevId = 0;
+    let useNodeValues = true;
+
     const graph = new Graph();
     const columns = ['Activity', 'Duration', 'Immediate Predecessor(s)'];
+    let errors: Error[] = [];
+    let errorTimeout;
 
-    $: data = [
-        // { id: 0, activity: 'A', duration: '3', predecessors: [] },
-        // { id: 1, activity: 'B', duration: '7', predecessors: ['A'] },
-        // { id: 2, activity: 'C', duration: '7', predecessors: ['A', 'B'] },
-    ];
-    const inputValues = { activity: '', duration: '', predecessors: [] };
+    const inputValues = {
+        activity: '',
+        duration: '',
+        nodes: '',
+        predecessors: [],
+    };
     let checkedValues;
 
     const addRow = () => {
         if (!validateInput()) return;
 
-        const { activity, duration } = inputValues;
-        const predecessors = Object.keys(checkedValues)
-            .filter((key) => checkedValues[key] === true)
-            .sort();
+        const { activity, duration, nodes } = inputValues;
+        const predecessors = useNodeValues
+            ? nodes.split(/[, ]+/).map((n) => parseInt(n, 10))
+            : Object.keys(checkedValues)
+                  .filter((key) => checkedValues[key] === true)
+                  .sort();
 
-        let dependencies = [];
+        const [nodeA, nodeB] = predecessors as number[];
+        graph.addEdge(nodeA - 1, nodeB - 1, parseInt(duration), activity);
 
-        if (predecessors.length > 0) {
-            let min = Infinity;
-
-            predecessors.forEach((pre) => {
-                const d = data.find((row) => row.activity === pre);
-                const [a, b] = d.dependsOn[0];
-
-                // console.log(activity, a, b);
-                if (b < min) min = b;
-                prevId = min;
-                // nextId++;
-
-                console.log(d.activity, activity, min, prevId, nextId);
-                d.dependsOn[1] = [a, min];
-
-                // console.log(activity, d.activity);
-            });
-            // console.log(activity, '=>', prevId, nextId);
-            nextId++;
-            // prevId--;
-            dependencies = [[prevId, nextId]];
-            graph.addEdge(prevId, nextId, parseInt(duration), activity);
-
-            // console.log(dependencies);
-        } else {
-            prevId = 0;
-            nextId++;
-            dependencies = [[prevId, nextId]];
-            graph.addEdge(0, nextId, parseInt(duration), activity);
-        }
-
+        let dependencies = [nodeA - 1, nodeB - 1]; // for activity based predecessors
         const maxTextLength = 20;
         const row = {
             dependsOn: dependencies,
@@ -72,10 +51,8 @@
         };
         data = [...data, { ...row }];
 
-        // console.log(activity, prevId, nextId);
-
         // Reset inputs
-        inputValues.activity = inputValues.duration = null;
+        inputValues.activity = inputValues.duration = inputValues.nodes = null;
 
         // Update store
         $graphStore = graph;
@@ -88,7 +65,7 @@
         for (let i = 0; i < data.length; i++) {
             if (data[i].activity != activity) {
                 if (data[i].predecessors.length > 0) {
-                    // @TODO remove from predecessors ids from dependencies
+                    // @TODO remove from predecessors ids from dependencies (activity based)
                     data[i].predecessors = data[i].predecessors.filter(
                         (pre) => {
                             return pre != activity;
@@ -98,29 +75,76 @@
 
                 newData.push(data[i]);
             }
+            console.log(data[i]);
         }
 
         data = newData;
     };
 
     const validateInput = () => {
-        const { activity, duration } = inputValues;
+        const { activity, duration, nodes } = inputValues;
+        errors = [];
 
-        if (
-            !Number.isInteger(parseInt(duration)) ||
-            typeof activity !== 'string'
-        ) {
-            error = true;
+        clearTimeout(errorTimeout);
+
+        if (!Number.isInteger(parseInt(duration))) {
+            const newError = {
+                isValid: false,
+                message: 'Duration must be a number.',
+            };
+            errors.push(newError);
+        } else {
+            errors = [];
+        }
+
+        if (activity.length === 0 || typeof activity !== 'string') {
+            const newError = {
+                isValid: false,
+                message: 'Incorrect activity',
+            };
+            errors.push(newError);
+        }
+
+        if (!nodes) {
+            const newError = {
+                isValid: false,
+                message: 'Select corresponding nodes.',
+            };
+            errors.push(newError);
+        }
+
+        const nodesArray =
+            nodes && nodes.split(/[, ]+/).map((n) => parseInt(n, 10));
+        if (nodesArray.length === 1 || nodesArray.length > 2) {
+            const newError = {
+                isValid: false,
+                message: 'Incorrect amount of nodes.',
+            };
+            errors.push(newError);
+        }
+
+        if (errors.find((err) => err.isValid === false)) {
+            errorTimeout = setTimeout(() => {
+                errors = [];
+            }, 5000);
             return false;
         }
 
-        error = false;
+        errors = [];
         return true;
+
+        // return errors.find((err) => err.isValid === false) ? false : true;
+    };
+
+    const clearError = (e: CustomEvent) => {
+        errors = errors.filter((err) => err.message !== e.detail.message);
     };
 
     const getAvailablePredecessors = (name?: string): string[] => {
         if (!name) {
-            return data.map(({ activity }) => activity);
+            return useNodeValues
+                ? data.map(({ activity }) => activity)
+                : data.map(({ activity }) => activity);
         }
 
         const available: string[] = [];
@@ -130,25 +154,22 @@
 
         return available;
     };
-
-    const handleSubmit = () => {
-        // console.log(checkedValues);
-    };
 </script>
 
 <div class="relative shadow-md sm:rounded-lg bg-white">
-    <h1 class="text-2xl font-black px-4 pt-2 ">Activities</h1>
+    <div class="flex gap-1 items-center pt-2">
+        <h1 class="text-2xl font-black px-4">Activities</h1>
+        <input
+            class="form-check-input h-4 w-4 mt-1 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left cursor-pointer"
+            type="checkbox"
+            id="predecessorType"
+            bind:checked={useNodeValues}
+            on:click={() => (useNodeValues = !useNodeValues)}
+        />
+        <label for="predecessorType" class="pt-1">Use node values</label>
+    </div>
     <!-- User Input -->
-    <div class="flex gap-4 p-4 w-1/2">
-        <!-- {#each inputs as { placeholder, type, editable, size, key }, i}
-            <input
-                type="text"
-                bind:value={inputValues[key]}
-                {placeholder}
-                contenteditable={editable}
-                class={`${size} flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-            />
-        {/each} -->
+    <form class="flex gap-4 p-4 w-1/2" on:submit|preventDefault={addRow}>
         <input
             type="text"
             bind:value={inputValues.activity}
@@ -164,14 +185,22 @@
             placeholder="Duration"
             class="w-24 flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         />
-        <Dropdown
-            size="w-full"
-            getOptions={data && getAvailablePredecessors}
-            bind:value={checkedValues}
-            on:submit={handleSubmit}
-        />
+        {#if useNodeValues}
+            <input
+                type="text"
+                bind:value={inputValues.nodes}
+                contenteditable={true}
+                placeholder="Connected nodes [e.q 1, 2]"
+                class="w-24 flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            />
+        {:else}
+            <Dropdown
+                size="w-full"
+                getOptions={data && getAvailablePredecessors}
+                bind:value={checkedValues}
+            />
+        {/if}
         <button
-            on:click={addRow}
             class="flex gap-1 items-center justify-end focus:bg-blue-700 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
         >
             <svg
@@ -189,6 +218,11 @@
             >
             <span>Add</span>
         </button>
+    </form>
+    <div class="flex flex-col gap-2 p-4 pt-0">
+        {#each errors as { message }, id (message)}
+            <Error {message} on:clear={clearError} />
+        {/each}
     </div>
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <!-- Headers -->

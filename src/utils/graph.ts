@@ -117,6 +117,10 @@ class Graph {
         return [sourceNode, destinationNode];
     }
 
+    editNode(src: number, id: number) {
+        this.adjList[src].node.id = id;
+    }
+
     removeEdge(src: number, dst: number) {
         const sourceNode = this.nodes.get(src);
         const destinationNode = this.nodes.get(dst);
