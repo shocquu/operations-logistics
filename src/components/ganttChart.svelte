@@ -230,7 +230,7 @@
                 tasks.push({
                     id: a.node.id,
                     resourceId: a.node.id,
-                    label: `Task ${a.name} ${iid}`,
+                    label: ' ',
                     from: time((a.node.predecessors[0].node.id + 1).toString()),
                     to: time(
                         (
