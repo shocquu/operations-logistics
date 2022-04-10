@@ -32,9 +32,12 @@ class Node {
     }
 
     removeAdjacent(node) {
-        const index = this.adjList.indexOf(node);
+        const nodes = this.adjList.map((adj) => adj.node);
+        const index = nodes.indexOf(node);
+
         if (index > -1) {
             this.adjList.splice(index, 1);
+            console.log(this.adjList);
             return node;
         }
     }

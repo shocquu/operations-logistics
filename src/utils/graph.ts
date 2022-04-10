@@ -71,7 +71,7 @@ class Graph {
 
         const visited = new Map();
         const criticalPath = [];
-        const firstList = this.adjList[0];
+        const firstList = this.nodes.get(0).adjList;
 
         const firstNode =
             firstList &&
@@ -112,13 +112,10 @@ class Graph {
 
         sourceNode.addAdjacent({ node: destinationNode, weight, name });
         destinationNode.addPredecessor({ node: sourceNode, weight, name });
+        sourceNode.addAdjacent({ node: destinationNode, weight, name });
         this.adjList[src].push({ node: destinationNode, weight, name });
 
         return [sourceNode, destinationNode];
-    }
-
-    editNode(src: number, id: number) {
-        this.adjList[src].node.id = id;
     }
 
     removeEdge(src: number, dst: number) {
@@ -127,6 +124,8 @@ class Graph {
 
         if (sourceNode && destinationNode) {
             sourceNode.removeAdjacent(destinationNode);
+            this.nodes.delete(src);
+            this.nodes.delete(dst);
         }
 
         return [sourceNode, destinationNode];

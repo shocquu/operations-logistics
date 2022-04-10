@@ -26,6 +26,7 @@
         nodes: '',
         predecessors: [],
     };
+    let firstInput;
     let checkedValues;
 
     const addRow = () => {
@@ -57,28 +58,53 @@
         // Update store
         $graphStore = graph;
         $criticalPath = Array.from(graph.findCriticalPath());
+
+        // Focus on first input when submitted
+        firstInput.focus();
     };
 
     const deleteRow = (activity: string) => {
         const newData = [];
 
+        // for (let i = 0; i < data.length; i++) {
+        //     if (data[i].activity !== activity) {
+        //         if (data[i].predecessors.length > 0) {
+        //             // @TODO remove from predecessors ids from dependencies (activity based)
+        //             data[i].predecessors = data[i].predecessors.filter(
+        //                 (pre) => {
+        //                     return pre !== activity;
+        //                 }
+        //             );
+        //         }
+
+        //         newData.push(data[i]);
+        //     }
+        //     // console.log(data[i]);
+        // }
+
+        // data = newData;
+
         for (let i = 0; i < data.length; i++) {
-            if (data[i].activity != activity) {
+            if (data[i].dependsOn === activity) {
+                const [a, b] = data[i].dependsOn;
+                $graphStore.removeEdge(a, b);
+            }
+
+            if (data[i].dependsOn !== activity) {
                 if (data[i].predecessors.length > 0) {
-                    // @TODO remove from predecessors ids from dependencies (activity based)
                     data[i].predecessors = data[i].predecessors.filter(
                         (pre) => {
-                            return pre != activity;
+                            return pre !== activity;
                         }
                     );
                 }
 
                 newData.push(data[i]);
             }
-            console.log(data[i]);
         }
 
         data = newData;
+        $graphStore = graph;
     };
 
     const validateInput = () => {
@@ -97,7 +123,7 @@
             errors = [];
         }
 
-        if (activity.length === 0 || typeof activity !== 'string') {
+        if (!activity || !isNaN(parseInt(activity))) {
             const newError = {
                 isValid: false,
                 message: 'Incorrect activity',
@@ -105,7 +131,10 @@
             errors.push(newError);
         }
 
-        if (!nodes) {
+        const nodesArray =
+            nodes && nodes.split(/[, ]+/).map((n) => parseInt(n, 10));
+
+        if (!nodes || !nodesArray || nodesArray.length === 0) {
             const newError = {
                 isValid: false,
                 message: 'Select corresponding nodes.',
@@ -113,9 +142,7 @@
             errors.push(newError);
         }
 
-        const nodesArray =
-            nodes && nodes.split(/[, ]+/).map((n) => parseInt(n, 10));
-        if (nodesArray.length === 1 || nodesArray.length > 2) {
+        if (nodesArray?.length === 1 || nodesArray?.length > 2) {
             const newError = {
                 isValid: false,
                 message: 'Incorrect amount of nodes.',
@@ -132,8 +159,6 @@
 
         errors = [];
         return true;
-
-        // return errors.find((err) => err.isValid === false) ? false : true;
     };
 
     const clearError = (e: CustomEvent) => {
@@ -157,25 +182,27 @@
 </script>
 
 <div class="relative shadow-md sm:rounded-lg bg-white">
-    <div class="flex gap-1 items-center pt-2">
-        <h1 class="text-2xl font-black px-4">Activities</h1>
-        <input
-            class="form-check-input h-4 w-4 mt-1 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left cursor-pointer"
-            type="checkbox"
-            id="predecessorType"
-            bind:checked={useNodeValues}
-            on:click={() => (useNodeValues = !useNodeValues)}
-        />
-        <label for="predecessorType" class="pt-1">Use node values</label>
+    <div class="flex gap-1 items-center justify-between pt-2 px-4">
+        <h1 class="text-2xl font-black">Activities</h1>
+        <label for="predecessorType" class="pt-1"
+            ><input
+                class="form-check-input h-4 w-4 mr-1 mt-1 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left cursor-pointer"
+                type="checkbox"
+                id="predecessorType"
+                bind:checked={useNodeValues}
+                on:click={() => (useNodeValues = !useNodeValues)}
+            />Use node values</label
+        >
     </div>
     <!-- User Input -->
-    <form class="flex gap-4 p-4 w-1/2" on:submit|preventDefault={addRow}>
+    <form class="flex gap-4 p-4" on:submit|preventDefault={addRow}>
         <input
             type="text"
+            bind:this={firstInput}
             bind:value={inputValues.activity}
             contenteditable={true}
             placeholder="Activity name"
-            class="w-24 flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="w-full flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         />
         <input
             min="0"
@@ -183,7 +210,7 @@
             bind:value={inputValues.duration}
             contenteditable={true}
             placeholder="Duration"
-            class="w-24 flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="w-full flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         />
         {#if useNodeValues}
             <input
@@ -191,7 +218,7 @@
                 bind:value={inputValues.nodes}
                 contenteditable={true}
                 placeholder="Connected nodes [e.q 1, 2]"
-                class="w-24 flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="w-full flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
         {:else}
             <Dropdown
@@ -238,7 +265,7 @@
 
         <!-- Rows -->
         <tbody>
-            {#each data as { activity, duration, predecessors }, id (activity)}
+            {#each data as { activity, duration, predecessors, dependsOn }, id (dependsOn)}
                 <tr
                     animate:flip
                     in:fade
@@ -255,12 +282,12 @@
                             <span
                                 bind:innerHTML={duration}
                                 contenteditable="true"
-                                class="border-none bg-inherit text-gray-900 text-sm rounded-lg focus:bg-white focus:ring-blue-500 focus:border-blue-500 block w-80 pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                class="border-none bg-inherit text-gray-900 text-sm rounded-lg focus:bg-white focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             />
                         {:else}
                             <span
                                 contenteditable="false"
-                                class="border-none bg-inherit text-gray-900 text-sm rounded-lg focus:bg-white focus:ring-blue-500 focus:border-blue-500 block w-80 pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                class="border-none bg-inherit text-gray-900 text-sm rounded-lg focus:bg-white focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 >{duration}</span
                             >
                         {/if}
@@ -305,7 +332,7 @@
                         <button
                             type="button"
                             class="border-0"
-                            on:click={() => deleteRow(activity)}
+                            on:click={() => deleteRow(dependsOn)}
                         >
                             <svg
                                 class="w-6 h-6 mb-px text-red-500"
@@ -327,7 +354,7 @@
                 <tr>
                     <td
                         colspan={columns.length}
-                        class="md:text-2xl sm:text-sm font-medium text-center py-10"
+                        class="md:text-2xl sm:text-sm font-medium text-center px-5 py-10"
                     >
                         You haven't added any activities yet. Use the form above
                         to add new records.
