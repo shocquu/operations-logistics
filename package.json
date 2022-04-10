@@ -30,6 +30,7 @@
         "typescript": "^4.6.2"
     },
     "dependencies": {
+        "gh-pages": "^3.2.3",
         "leader-line": "^1.0.7",
         "moment": "^2.29.2",
         "sirv-cli": "^2.0.0",
