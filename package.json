@@ -34,6 +34,7 @@
         "leader-line": "^1.0.7",
         "moment": "^2.29.2",
         "sirv-cli": "^2.0.0",
-        "svelte-gantt": "^4.0.3-beta"
+        "svelte-gantt": "^4.0.3-beta",
+        "svelte-navigator": "^3.1.5"
     }
 }
