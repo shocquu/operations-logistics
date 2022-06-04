@@ -47,7 +47,7 @@
 <div class="relative inline-block text-left" bind:this={menu}>
     <button
         type="button"
-        class={`${size} h-full inline-flex flex-auto items-center bg-gray-50 border border-gray-300 text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+        class={`${size} h-full inline-flex flex-auto items-center bg-gray-50 border border-gray-300 text-gray-400 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 pl-3 p-2.5`}
         id="menu-button"
         aria-expanded="true"
         aria-haspopup="true"
@@ -83,13 +83,9 @@
             tabindex="-1"
         >
             <div class="py-2" role="none">
-                <p class="pl-3 pb-2 font-medium text-gray-800">
-                    Immediate predecessors
-                </p>
+                <p class="pl-3 pb-2 font-medium text-gray-800">Immediate predecessors</p>
                 {#each options as option}
-                    <div
-                        class="form-check flex gap-2 px-3 items-center hover:bg-gray-100"
-                    >
+                    <div class="form-check flex gap-2 px-3 items-center hover:bg-gray-100">
                         <input
                             class="form-check-input h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left cursor-pointer"
                             type="checkbox"
@@ -97,10 +93,7 @@
                             bind:checked={checkedValues[option]}
                             on:click={submit}
                         />
-                        <label
-                            class="form-check-label inline-block text-gray-800 flex-1"
-                            for={`option-${option}`}
-                        >
+                        <label class="form-check-label inline-block text-gray-800 flex-1" for={`option-${option}`}>
                             {option}
                         </label>
                     </div>

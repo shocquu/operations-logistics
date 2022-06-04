@@ -92,11 +92,9 @@
 
             if (data[i].dependsOn !== activity) {
                 if (data[i].predecessors.length > 0) {
-                    data[i].predecessors = data[i].predecessors.filter(
-                        (pre) => {
-                            return pre !== activity;
-                        }
-                    );
+                    data[i].predecessors = data[i].predecessors.filter((pre) => {
+                        return pre !== activity;
+                    });
                 }
 
                 newData.push(data[i]);
@@ -131,8 +129,7 @@
             errors.push(newError);
         }
 
-        const nodesArray =
-            nodes && nodes.split(/[, ]+/).map((n) => parseInt(n, 10));
+        const nodesArray = nodes && nodes.split(/[, ]+/).map((n) => parseInt(n, 10));
 
         if (!nodes || !nodesArray || nodesArray.length === 0) {
             const newError = {
@@ -167,15 +164,11 @@
 
     const getAvailablePredecessors = (name?: string): string[] => {
         if (!name) {
-            return useNodeValues
-                ? data.map(({ activity }) => activity)
-                : data.map(({ activity }) => activity);
+            return useNodeValues ? data.map(({ activity }) => activity) : data.map(({ activity }) => activity);
         }
 
         const available: string[] = [];
-        data.forEach(
-            ({ activity }) => activity != name && available.push(activity)
-        );
+        data.forEach(({ activity }) => activity != name && available.push(activity));
 
         return available;
     };
@@ -202,7 +195,7 @@
             bind:value={inputValues.activity}
             contenteditable={true}
             placeholder="Activity name"
-            class="w-full flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="w-full flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5"
         />
         <input
             min="0"
@@ -210,7 +203,7 @@
             bind:value={inputValues.duration}
             contenteditable={true}
             placeholder="Duration"
-            class="w-full flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="w-full flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5"
         />
         {#if useNodeValues}
             <input
@@ -218,17 +211,13 @@
                 bind:value={inputValues.nodes}
                 contenteditable={true}
                 placeholder="Connected nodes [e.q 1, 2]"
-                class="w-full flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="w-full flex-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5"
             />
         {:else}
-            <Dropdown
-                size="w-full"
-                getOptions={data && getAvailablePredecessors}
-                bind:value={checkedValues}
-            />
+            <Dropdown size="w-full" getOptions={data && getAvailablePredecessors} bind:value={checkedValues} />
         {/if}
         <button
-            class="flex gap-1 items-center justify-end focus:bg-blue-700 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            class="flex gap-1 items-center justify-end focus:bg-blue-700 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
         >
             <svg
                 class="w-6 h-6"
@@ -251,11 +240,9 @@
             <Error {message} on:clear={clearError} />
         {/each}
     </div>
-    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+    <table class="w-full text-sm text-left text-gray-500">
         <!-- Headers -->
-        <thead
-            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-        >
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
                 {#each columns as column}
                     <th scope="col" class="px-6 py-3">{column}</th>
@@ -266,46 +253,32 @@
         <!-- Rows -->
         <tbody>
             {#each data as { activity, duration, predecessors, dependsOn }, id (dependsOn)}
-                <tr
-                    animate:flip
-                    in:fade
-                    out:fly={{ x: 100 }}
-                    class="relative bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 group"
-                >
-                    <th
-                        scope="row"
-                        class="px-6 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap"
-                        >{activity}</th
-                    >
+                <tr animate:flip in:fade out:fly={{ x: 100 }} class="relative bg-white border-b hover:bg-gray-50 group">
+                    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">{activity}</th>
                     <td class="px-3 py-2 ">
                         {#if editMode}
                             <span
                                 bind:innerHTML={duration}
                                 contenteditable="true"
-                                class="border-none bg-inherit text-gray-900 text-sm rounded-lg focus:bg-white focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                class="border-none bg-inherit text-gray-900 text-sm rounded-lg focus:bg-white focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 p-2.5"
                             />
                         {:else}
                             <span
                                 contenteditable="false"
-                                class="border-none bg-inherit text-gray-900 text-sm rounded-lg focus:bg-white focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                class="border-none bg-inherit text-gray-900 text-sm rounded-lg focus:bg-white focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 p-2.5"
                                 >{duration}</span
                             >
                         {/if}
-                    </td><td
-                        class="px-3 py-2 focus:ring-blue-500 focus:outline-blue-500"
-                    >
+                    </td><td class="px-3 py-2 focus:ring-blue-500 focus:outline-blue-500">
                         {#if editMode}
                             <Dropdown
                                 bind:value={inputValues.predecessors}
-                                getOptions={() =>
-                                    getAvailablePredecessors(activity)}
+                                getOptions={() => getAvailablePredecessors(activity)}
                             />
                         {:else}
                             <span
-                                class="border-none bg-inherit text-gray-900 text-sm rounded-lg focus:bg-white focus:ring-blue-500 focus:border-blue-500 block w-80 pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                >{predecessors.length > 0
-                                    ? predecessors.join(', ')
-                                    : '-'}</span
+                                class="border-none bg-inherit text-gray-900 text-sm rounded-lg focus:bg-white focus:ring-blue-500 focus:border-blue-500 block w-80 pl-3 p-2.5"
+                                >{predecessors.length > 0 ? predecessors.join(', ') : '-'}</span
                             >
                         {/if}
                     </td>
@@ -329,11 +302,7 @@
                                 /></svg
                             >
                         </button>
-                        <button
-                            type="button"
-                            class="border-0"
-                            on:click={() => deleteRow(dependsOn)}
-                        >
+                        <button type="button" class="border-0" on:click={() => deleteRow(dependsOn)}>
                             <svg
                                 class="w-6 h-6 mb-px text-red-500"
                                 fill="none"
@@ -352,12 +321,8 @@
                 </tr>
             {:else}
                 <tr>
-                    <td
-                        colspan={columns.length}
-                        class="md:text-2xl sm:text-sm font-medium text-center px-5 py-10"
-                    >
-                        You haven't added any activities yet. Use the form above
-                        to add new records.
+                    <td colspan={columns.length} class="md:text-2xl sm:text-sm font-medium text-center px-5 py-10">
+                        You haven't added any activities yet. Use the form above to add new records.
                     </td>
                 </tr>
             {/each}

@@ -11,8 +11,8 @@
 
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full bg-white">
     <h1 class="px-4 pt-2 text-2xl font-black">Unit transport costs</h1>
-    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead class="text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <table class="w-full text-sm text-left text-gray-500">
+        <thead class="text-sm text-gray-700 uppercase bg-gray-50">
             <tr class="flex">
                 <th scope="col" class="px-6 py-3">Supply\Demand</th>
                 {#each customers as customer, i}
@@ -26,13 +26,8 @@
         </thead>
         <tbody>
             {#each suppliers as supplier, i}
-                <tr
-                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 flex"
-                >
-                    <th
-                        scope="row"
-                        class="px-6 py-4 text-sm text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 whitespace-nowrap flex"
-                    >
+                <tr class="bg-white border-b hover:bg-gray-50 flex">
+                    <th scope="row" class="px-6 py-4 text-sm text-gray-700 bg-gray-50 whitespace-nowrap flex">
                         {supplier} (
                         <p class="w-8 text-center" contenteditable="true" bind:innerHTML={$supply[i]}>0</p>
                         )
