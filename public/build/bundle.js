@@ -1001,6 +1001,10 @@ var app = (function () {
         else
             dispatch_dev('SvelteDOMSetAttribute', { node, attribute, value });
     }
+    function prop_dev(node, property, value) {
+        node[property] = value;
+        dispatch_dev('SvelteDOMSetProperty', { node, property, value });
+    }
     function set_data_dev(text, data) {
         data = '' + data;
         if (text.wholeText === data)
@@ -2791,7 +2795,7 @@ var app = (function () {
     }
 
     // (113:2) {:else}
-    function create_else_block$5(ctx) {
+    function create_else_block$6(ctx) {
     	let current;
     	const default_slot_template = /*#slots*/ ctx[17].default;
     	const default_slot = create_slot$1(default_slot_template, ctx, /*$$scope*/ ctx[18], get_default_slot_context);
@@ -2839,7 +2843,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_else_block$5.name,
+    		id: create_else_block$6.name,
     		type: "else",
     		source: "(113:2) {:else}",
     		ctx
@@ -2849,7 +2853,7 @@ var app = (function () {
     }
 
     // (105:2) {#if component !== null}
-    function create_if_block_1$5(ctx) {
+    function create_if_block_1$4(ctx) {
     	let switch_instance;
     	let switch_instance_anchor;
     	let current;
@@ -2944,7 +2948,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1$5.name,
+    		id: create_if_block_1$4.name,
     		type: "if",
     		source: "(105:2) {#if component !== null}",
     		ctx
@@ -2959,7 +2963,7 @@ var app = (function () {
     	let if_block;
     	let if_block_anchor;
     	let current;
-    	const if_block_creators = [create_if_block_1$5, create_else_block$5];
+    	const if_block_creators = [create_if_block_1$4, create_else_block$6];
     	const if_blocks = [];
 
     	function select_block_type(ctx, dirty) {
@@ -4368,7 +4372,7 @@ var app = (function () {
     	let each_1_else = null;
 
     	if (!each_value.length) {
-    		each_1_else = create_else_block$4(ctx);
+    		each_1_else = create_else_block$5(ctx);
     	}
 
     	const block = {
@@ -4443,7 +4447,7 @@ var app = (function () {
     						each_1_else = null;
     					}
     				} else if (!each_1_else) {
-    					each_1_else = create_else_block$4(ctx);
+    					each_1_else = create_else_block$5(ctx);
     					each_1_else.c();
     					each_1_else.m(div0, null);
     				}
@@ -4468,7 +4472,7 @@ var app = (function () {
     }
 
     // (94:16) {:else}
-    function create_else_block$4(ctx) {
+    function create_else_block$5(ctx) {
     	let div;
     	let svg;
     	let path;
@@ -4515,7 +4519,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_else_block$4.name,
+    		id: create_else_block$5.name,
     		type: "else",
     		source: "(94:16) {:else}",
     		ctx
@@ -5397,7 +5401,7 @@ var app = (function () {
     }
 
     // (224:24) {#if editMode}
-    function create_if_block_1$4(ctx) {
+    function create_if_block_1$3(ctx) {
     	let span;
     	let mounted;
     	let dispose;
@@ -5442,7 +5446,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1$4.name,
+    		id: create_if_block_1$3.name,
     		type: "if",
     		source: "(224:24) {#if editMode}",
     		ctx
@@ -5452,7 +5456,7 @@ var app = (function () {
     }
 
     // (243:24) {:else}
-    function create_else_block$3(ctx) {
+    function create_else_block$4(ctx) {
     	let span;
 
     	let t_value = (/*predecessors*/ ctx[30].length > 0
@@ -5486,7 +5490,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_else_block$3.name,
+    		id: create_else_block$4.name,
     		type: "else",
     		source: "(243:24) {:else}",
     		ctx
@@ -5595,13 +5599,13 @@ var app = (function () {
     	let dispose;
 
     	function select_block_type_1(ctx, dirty) {
-    		if (/*editMode*/ ctx[6]) return create_if_block_1$4;
+    		if (/*editMode*/ ctx[6]) return create_if_block_1$3;
     		return create_else_block_1$1;
     	}
 
     	let current_block_type = select_block_type_1(ctx);
     	let if_block0 = current_block_type(ctx);
-    	const if_block_creators = [create_if_block$5, create_else_block$3];
+    	const if_block_creators = [create_if_block$5, create_else_block$4];
     	const if_blocks = [];
 
     	function select_block_type_2(ctx, dirty) {
@@ -6491,20 +6495,20 @@ var app = (function () {
     	}
     }
 
-    // export const totalProfit = writable(0);
-    const supply = writable$1(['20', '30']);
-    const demand = writable$1(['10', '28', '27']);
+    const totalProfit = writable$1(0);
+    // export const supply = writable(['20', '30']);
+    // export const demand = writable(['10', '28', '27']);
     const sellingPrices = writable$1(['30', '25', '30']);
     const purchasePrices = writable$1(['10', '12']);
+    const solutionTable = writable$1([]);
     const transportCosts = writable$1([
         [8, 14, 17],
         [12, 9, 19],
     ]);
-    const totalProfit = writable$1(0);
-    // export const supply = writable<string[]>(['0', '0']);
-    // export const demand = writable<string[]>(['0', '0', '0']);
-    const supplySolution = writable$1(get_store_value$1(supply));
-    const demandSolution = writable$1(get_store_value$1(demand));
+    // export const totalProfit = writable<number>(0);
+    const supply = writable$1(['0', '0']);
+    const demand = writable$1(['0', '0', '0']);
+    // export const solutionTable = writable([]);
     // export const sellingPrices = writable<string[]>([]);
     // export const purchasePrices = writable<string[]>([]);
     // export const transportCosts = writable([
@@ -6524,20 +6528,26 @@ var app = (function () {
     	let tr0;
     	let th0;
     	let t3;
-    	let td0;
+    	let input0;
+    	let input0_value_value;
+    	let t4;
+    	let input1;
+    	let input1_value_value;
     	let t5;
-    	let td1;
-    	let t7;
-    	let td2;
-    	let t9;
+    	let input2;
+    	let input2_value_value;
+    	let t6;
     	let tr1;
     	let th1;
-    	let t11;
-    	let td3;
-    	let t13;
-    	let td4;
-    	let t15;
-    	let td5;
+    	let t8;
+    	let input3;
+    	let input3_value_value;
+    	let t9;
+    	let input4;
+    	let input4_value_value;
+    	let t10;
+    	let input5;
+    	let input5_value_value;
     	let mounted;
     	let dispose;
 
@@ -6553,67 +6563,84 @@ var app = (function () {
     			th0 = element$1("th");
     			th0.textContent = "Selling Price";
     			t3 = space$1();
-    			td0 = element$1("td");
-    			td0.textContent = "0";
+    			input0 = element$1("input");
+    			t4 = space$1();
+    			input1 = element$1("input");
     			t5 = space$1();
-    			td1 = element$1("td");
-    			td1.textContent = "0";
-    			t7 = space$1();
-    			td2 = element$1("td");
-    			td2.textContent = "0";
-    			t9 = space$1();
+    			input2 = element$1("input");
+    			t6 = space$1();
     			tr1 = element$1("tr");
     			th1 = element$1("th");
     			th1.textContent = "Purchase Price";
-    			t11 = space$1();
-    			td3 = element$1("td");
-    			td3.textContent = "0";
-    			t13 = space$1();
-    			td4 = element$1("td");
-    			td4.textContent = "0";
-    			t15 = space$1();
-    			td5 = element$1("td");
-    			td5.textContent = "0";
+    			t8 = space$1();
+    			input3 = element$1("input");
+    			t9 = space$1();
+    			input4 = element$1("input");
+    			t10 = space$1();
+    			input5 = element$1("input");
     			attr_dev(h1, "class", "px-4 pt-2 text-2xl font-black");
-    			add_location(h1, file$6, 4, 4, 171);
+    			add_location(h1, file$6, 4, 4, 180);
     			attr_dev(th0, "scope", "row");
     			attr_dev(th0, "class", "px-6 py-4 font-medium text-gray-900 whitespace-nowrap");
     			add_location(th0, file$6, 8, 16, 376);
-    			attr_dev(td0, "class", "px-6 py-4");
-    			attr_dev(td0, "contenteditable", "true");
-    			if (/*$sellingPrices*/ ctx[0][0] === void 0) add_render_callback$1(() => /*td0_input_handler*/ ctx[2].call(td0));
-    			add_location(td0, file$6, 9, 16, 491);
-    			attr_dev(td1, "class", "px-6 py-4");
-    			attr_dev(td1, "contenteditable", "true");
-    			if (/*$sellingPrices*/ ctx[0][1] === void 0) add_render_callback$1(() => /*td1_input_handler*/ ctx[3].call(td1));
-    			add_location(td1, file$6, 10, 16, 594);
-    			attr_dev(td2, "class", "px-6 py-4");
-    			attr_dev(td2, "contenteditable", "true");
-    			if (/*$sellingPrices*/ ctx[0][2] === void 0) add_render_callback$1(() => /*td2_input_handler*/ ctx[4].call(td2));
-    			add_location(td2, file$6, 11, 16, 697);
-    			attr_dev(tr0, "class", "bg-white border-b hover:bg-gray-50");
-    			add_location(tr0, file$6, 7, 12, 312);
+    			attr_dev(input0, "class", "px-3 py-2 m-2");
+    			attr_dev(input0, "contenteditable", "true");
+    			attr_dev(input0, "type", "number");
+    			attr_dev(input0, "min", "0");
+    			input0.value = input0_value_value = /*$sellingPrices*/ ctx[0][0];
+    			if (/*$sellingPrices*/ ctx[0][0] === void 0) add_render_callback$1(() => /*input0_input_handler*/ ctx[2].call(input0));
+    			if (/*$sellingPrices*/ ctx[0][0] === void 0) add_render_callback$1(() => /*input0_input_handler_1*/ ctx[3].call(input0));
+    			add_location(input0, file$6, 9, 16, 491);
+    			attr_dev(input1, "class", "px-3 py-2 m-2");
+    			attr_dev(input1, "contenteditable", "true");
+    			attr_dev(input1, "type", "number");
+    			attr_dev(input1, "min", "0");
+    			input1.value = input1_value_value = /*$sellingPrices*/ ctx[0][1];
+    			if (/*$sellingPrices*/ ctx[0][1] === void 0) add_render_callback$1(() => /*input1_input_handler*/ ctx[4].call(input1));
+    			if (/*$sellingPrices*/ ctx[0][1] === void 0) add_render_callback$1(() => /*input1_input_handler_1*/ ctx[5].call(input1));
+    			add_location(input1, file$6, 17, 16, 781);
+    			attr_dev(input2, "class", "px-3 py-2 m-2");
+    			attr_dev(input2, "contenteditable", "true");
+    			attr_dev(input2, "type", "number");
+    			attr_dev(input2, "min", "0");
+    			input2.value = input2_value_value = /*$sellingPrices*/ ctx[0][2];
+    			if (/*$sellingPrices*/ ctx[0][2] === void 0) add_render_callback$1(() => /*input2_input_handler*/ ctx[6].call(input2));
+    			if (/*$sellingPrices*/ ctx[0][2] === void 0) add_render_callback$1(() => /*input2_input_handler_1*/ ctx[7].call(input2));
+    			add_location(input2, file$6, 25, 16, 1071);
+    			attr_dev(tr0, "class", "border-b hover:bg-gray-50");
+    			add_location(tr0, file$6, 7, 12, 321);
     			attr_dev(th1, "scope", "row");
     			attr_dev(th1, "class", "px-6 py-4 font-medium text-gray-900 whitespace-nowrap");
-    			add_location(th1, file$6, 14, 16, 878);
-    			attr_dev(td3, "class", "px-6 py-4");
-    			attr_dev(td3, "contenteditable", "true");
-    			if (/*$purchasePrices*/ ctx[1][0] === void 0) add_render_callback$1(() => /*td3_input_handler*/ ctx[5].call(td3));
-    			add_location(td3, file$6, 15, 16, 994);
-    			attr_dev(td4, "class", "px-6 py-4");
-    			attr_dev(td4, "contenteditable", "true");
-    			if (/*$purchasePrices*/ ctx[1][1] === void 0) add_render_callback$1(() => /*td4_input_handler*/ ctx[6].call(td4));
-    			add_location(td4, file$6, 16, 16, 1098);
-    			attr_dev(td5, "class", "px-6 py-4");
-    			attr_dev(td5, "contenteditable", "true");
-    			if (/*$purchasePrices*/ ctx[1][2] === void 0) add_render_callback$1(() => /*td5_input_handler*/ ctx[7].call(td5));
-    			add_location(td5, file$6, 17, 16, 1202);
-    			attr_dev(tr1, "class", "bg-white border-b hover:bg-gray-50");
-    			add_location(tr1, file$6, 13, 12, 814);
-    			add_location(tbody, file$6, 6, 8, 292);
+    			add_location(th1, file$6, 35, 16, 1430);
+    			attr_dev(input3, "class", "px-3 py-2 m-2");
+    			attr_dev(input3, "contenteditable", "true");
+    			attr_dev(input3, "type", "number");
+    			input3.value = input3_value_value = /*$purchasePrices*/ ctx[1][0];
+    			if (/*$purchasePrices*/ ctx[1][0] === void 0) add_render_callback$1(() => /*input3_input_handler*/ ctx[8].call(input3));
+    			if (/*$purchasePrices*/ ctx[1][0] === void 0) add_render_callback$1(() => /*input3_input_handler_1*/ ctx[9].call(input3));
+    			add_location(input3, file$6, 36, 16, 1546);
+    			attr_dev(input4, "class", "px-3 py-2 m-2");
+    			attr_dev(input4, "contenteditable", "true");
+    			attr_dev(input4, "type", "number");
+    			attr_dev(input4, "min", "0");
+    			input4.value = input4_value_value = /*$purchasePrices*/ ctx[1][1];
+    			if (/*$purchasePrices*/ ctx[1][1] === void 0) add_render_callback$1(() => /*input4_input_handler*/ ctx[10].call(input4));
+    			if (/*$purchasePrices*/ ctx[1][1] === void 0) add_render_callback$1(() => /*input4_input_handler_1*/ ctx[11].call(input4));
+    			add_location(input4, file$6, 43, 16, 1810);
+    			attr_dev(input5, "class", "px-3 py-2 m-2");
+    			attr_dev(input5, "contenteditable", "true");
+    			attr_dev(input5, "type", "number");
+    			attr_dev(input5, "min", "0");
+    			input5.value = input5_value_value = /*$purchasePrices*/ ctx[1][2];
+    			if (/*$purchasePrices*/ ctx[1][2] === void 0) add_render_callback$1(() => /*input5_input_handler*/ ctx[12].call(input5));
+    			if (/*$purchasePrices*/ ctx[1][2] === void 0) add_render_callback$1(() => /*input5_input_handler_1*/ ctx[13].call(input5));
+    			add_location(input5, file$6, 51, 16, 2102);
+    			attr_dev(tr1, "class", "border-b hover:bg-gray-50");
+    			add_location(tr1, file$6, 34, 12, 1375);
+    			add_location(tbody, file$6, 6, 8, 301);
     			attr_dev(table, "class", "w-full text-sm text-left text-gray-500");
-    			add_location(table, file$6, 5, 4, 229);
-    			attr_dev(div, "class", "relative overflow-x-auto shadow-md sm:rounded-lg");
+    			add_location(table, file$6, 5, 4, 238);
+    			attr_dev(div, "class", "relative overflow-x-auto shadow-md sm:rounded-lg bg-white");
     			add_location(div, file$6, 3, 0, 104);
     		},
     		l: function claim(nodes) {
@@ -6628,86 +6655,164 @@ var app = (function () {
     			append_dev(tbody, tr0);
     			append_dev(tr0, th0);
     			append_dev(tr0, t3);
-    			append_dev(tr0, td0);
+    			append_dev(tr0, input0);
 
     			if (/*$sellingPrices*/ ctx[0][0] !== void 0) {
-    				td0.innerHTML = /*$sellingPrices*/ ctx[0][0];
+    				input0.innerHTML = /*$sellingPrices*/ ctx[0][0];
+    			}
+
+    			if (/*$sellingPrices*/ ctx[0][0] !== void 0) {
+    				input0.innerHTML = /*$sellingPrices*/ ctx[0][0];
+    			}
+
+    			append_dev(tr0, t4);
+    			append_dev(tr0, input1);
+
+    			if (/*$sellingPrices*/ ctx[0][1] !== void 0) {
+    				input1.innerHTML = /*$sellingPrices*/ ctx[0][1];
+    			}
+
+    			if (/*$sellingPrices*/ ctx[0][1] !== void 0) {
+    				input1.innerHTML = /*$sellingPrices*/ ctx[0][1];
     			}
 
     			append_dev(tr0, t5);
-    			append_dev(tr0, td1);
-
-    			if (/*$sellingPrices*/ ctx[0][1] !== void 0) {
-    				td1.innerHTML = /*$sellingPrices*/ ctx[0][1];
-    			}
-
-    			append_dev(tr0, t7);
-    			append_dev(tr0, td2);
+    			append_dev(tr0, input2);
 
     			if (/*$sellingPrices*/ ctx[0][2] !== void 0) {
-    				td2.innerHTML = /*$sellingPrices*/ ctx[0][2];
+    				input2.innerHTML = /*$sellingPrices*/ ctx[0][2];
     			}
 
-    			append_dev(tbody, t9);
+    			if (/*$sellingPrices*/ ctx[0][2] !== void 0) {
+    				input2.innerHTML = /*$sellingPrices*/ ctx[0][2];
+    			}
+
+    			append_dev(tbody, t6);
     			append_dev(tbody, tr1);
     			append_dev(tr1, th1);
-    			append_dev(tr1, t11);
-    			append_dev(tr1, td3);
+    			append_dev(tr1, t8);
+    			append_dev(tr1, input3);
 
     			if (/*$purchasePrices*/ ctx[1][0] !== void 0) {
-    				td3.innerHTML = /*$purchasePrices*/ ctx[1][0];
+    				input3.innerHTML = /*$purchasePrices*/ ctx[1][0];
     			}
 
-    			append_dev(tr1, t13);
-    			append_dev(tr1, td4);
+    			if (/*$purchasePrices*/ ctx[1][0] !== void 0) {
+    				input3.innerHTML = /*$purchasePrices*/ ctx[1][0];
+    			}
+
+    			append_dev(tr1, t9);
+    			append_dev(tr1, input4);
 
     			if (/*$purchasePrices*/ ctx[1][1] !== void 0) {
-    				td4.innerHTML = /*$purchasePrices*/ ctx[1][1];
+    				input4.innerHTML = /*$purchasePrices*/ ctx[1][1];
     			}
 
-    			append_dev(tr1, t15);
-    			append_dev(tr1, td5);
+    			if (/*$purchasePrices*/ ctx[1][1] !== void 0) {
+    				input4.innerHTML = /*$purchasePrices*/ ctx[1][1];
+    			}
+
+    			append_dev(tr1, t10);
+    			append_dev(tr1, input5);
 
     			if (/*$purchasePrices*/ ctx[1][2] !== void 0) {
-    				td5.innerHTML = /*$purchasePrices*/ ctx[1][2];
+    				input5.innerHTML = /*$purchasePrices*/ ctx[1][2];
+    			}
+
+    			if (/*$purchasePrices*/ ctx[1][2] !== void 0) {
+    				input5.innerHTML = /*$purchasePrices*/ ctx[1][2];
     			}
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(td0, "input", /*td0_input_handler*/ ctx[2]),
-    					listen_dev(td1, "input", /*td1_input_handler*/ ctx[3]),
-    					listen_dev(td2, "input", /*td2_input_handler*/ ctx[4]),
-    					listen_dev(td3, "input", /*td3_input_handler*/ ctx[5]),
-    					listen_dev(td4, "input", /*td4_input_handler*/ ctx[6]),
-    					listen_dev(td5, "input", /*td5_input_handler*/ ctx[7])
+    					listen_dev(input0, "input", /*input0_input_handler*/ ctx[2]),
+    					listen_dev(input0, "input", /*input0_input_handler_1*/ ctx[3]),
+    					listen_dev(input1, "input", /*input1_input_handler*/ ctx[4]),
+    					listen_dev(input1, "input", /*input1_input_handler_1*/ ctx[5]),
+    					listen_dev(input2, "input", /*input2_input_handler*/ ctx[6]),
+    					listen_dev(input2, "input", /*input2_input_handler_1*/ ctx[7]),
+    					listen_dev(input3, "input", /*input3_input_handler*/ ctx[8]),
+    					listen_dev(input3, "input", /*input3_input_handler_1*/ ctx[9]),
+    					listen_dev(input4, "input", /*input4_input_handler*/ ctx[10]),
+    					listen_dev(input4, "input", /*input4_input_handler_1*/ ctx[11]),
+    					listen_dev(input5, "input", /*input5_input_handler*/ ctx[12]),
+    					listen_dev(input5, "input", /*input5_input_handler_1*/ ctx[13])
     				];
 
     				mounted = true;
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*$sellingPrices*/ 1 && /*$sellingPrices*/ ctx[0][0] !== td0.innerHTML) {
-    				td0.innerHTML = /*$sellingPrices*/ ctx[0][0];
+    			if (dirty & /*$sellingPrices*/ 1 && input0_value_value !== (input0_value_value = /*$sellingPrices*/ ctx[0][0]) && input0.value !== input0_value_value) {
+    				prop_dev(input0, "value", input0_value_value);
     			}
 
-    			if (dirty & /*$sellingPrices*/ 1 && /*$sellingPrices*/ ctx[0][1] !== td1.innerHTML) {
-    				td1.innerHTML = /*$sellingPrices*/ ctx[0][1];
+    			if (dirty & /*$sellingPrices*/ 1 && to_number(input0.innerHTML) !== /*$sellingPrices*/ ctx[0][0] && /*$sellingPrices*/ ctx[0][0] !== input0.innerHTML) {
+    				input0.innerHTML = /*$sellingPrices*/ ctx[0][0];
     			}
 
-    			if (dirty & /*$sellingPrices*/ 1 && /*$sellingPrices*/ ctx[0][2] !== td2.innerHTML) {
-    				td2.innerHTML = /*$sellingPrices*/ ctx[0][2];
+    			if (dirty & /*$sellingPrices*/ 1 && to_number(input0.innerHTML) !== /*$sellingPrices*/ ctx[0][0] && /*$sellingPrices*/ ctx[0][0] !== input0.innerHTML) {
+    				input0.innerHTML = /*$sellingPrices*/ ctx[0][0];
     			}
 
-    			if (dirty & /*$purchasePrices*/ 2 && /*$purchasePrices*/ ctx[1][0] !== td3.innerHTML) {
-    				td3.innerHTML = /*$purchasePrices*/ ctx[1][0];
+    			if (dirty & /*$sellingPrices*/ 1 && input1_value_value !== (input1_value_value = /*$sellingPrices*/ ctx[0][1]) && input1.value !== input1_value_value) {
+    				prop_dev(input1, "value", input1_value_value);
     			}
 
-    			if (dirty & /*$purchasePrices*/ 2 && /*$purchasePrices*/ ctx[1][1] !== td4.innerHTML) {
-    				td4.innerHTML = /*$purchasePrices*/ ctx[1][1];
+    			if (dirty & /*$sellingPrices*/ 1 && to_number(input1.innerHTML) !== /*$sellingPrices*/ ctx[0][1] && /*$sellingPrices*/ ctx[0][1] !== input1.innerHTML) {
+    				input1.innerHTML = /*$sellingPrices*/ ctx[0][1];
     			}
 
-    			if (dirty & /*$purchasePrices*/ 2 && /*$purchasePrices*/ ctx[1][2] !== td5.innerHTML) {
-    				td5.innerHTML = /*$purchasePrices*/ ctx[1][2];
+    			if (dirty & /*$sellingPrices*/ 1 && to_number(input1.innerHTML) !== /*$sellingPrices*/ ctx[0][1] && /*$sellingPrices*/ ctx[0][1] !== input1.innerHTML) {
+    				input1.innerHTML = /*$sellingPrices*/ ctx[0][1];
+    			}
+
+    			if (dirty & /*$sellingPrices*/ 1 && input2_value_value !== (input2_value_value = /*$sellingPrices*/ ctx[0][2]) && input2.value !== input2_value_value) {
+    				prop_dev(input2, "value", input2_value_value);
+    			}
+
+    			if (dirty & /*$sellingPrices*/ 1 && to_number(input2.innerHTML) !== /*$sellingPrices*/ ctx[0][2] && /*$sellingPrices*/ ctx[0][2] !== input2.innerHTML) {
+    				input2.innerHTML = /*$sellingPrices*/ ctx[0][2];
+    			}
+
+    			if (dirty & /*$sellingPrices*/ 1 && to_number(input2.innerHTML) !== /*$sellingPrices*/ ctx[0][2] && /*$sellingPrices*/ ctx[0][2] !== input2.innerHTML) {
+    				input2.innerHTML = /*$sellingPrices*/ ctx[0][2];
+    			}
+
+    			if (dirty & /*$purchasePrices*/ 2 && input3_value_value !== (input3_value_value = /*$purchasePrices*/ ctx[1][0]) && input3.value !== input3_value_value) {
+    				prop_dev(input3, "value", input3_value_value);
+    			}
+
+    			if (dirty & /*$purchasePrices*/ 2 && to_number(input3.innerHTML) !== /*$purchasePrices*/ ctx[1][0] && /*$purchasePrices*/ ctx[1][0] !== input3.innerHTML) {
+    				input3.innerHTML = /*$purchasePrices*/ ctx[1][0];
+    			}
+
+    			if (dirty & /*$purchasePrices*/ 2 && to_number(input3.innerHTML) !== /*$purchasePrices*/ ctx[1][0] && /*$purchasePrices*/ ctx[1][0] !== input3.innerHTML) {
+    				input3.innerHTML = /*$purchasePrices*/ ctx[1][0];
+    			}
+
+    			if (dirty & /*$purchasePrices*/ 2 && input4_value_value !== (input4_value_value = /*$purchasePrices*/ ctx[1][1]) && input4.value !== input4_value_value) {
+    				prop_dev(input4, "value", input4_value_value);
+    			}
+
+    			if (dirty & /*$purchasePrices*/ 2 && to_number(input4.innerHTML) !== /*$purchasePrices*/ ctx[1][1] && /*$purchasePrices*/ ctx[1][1] !== input4.innerHTML) {
+    				input4.innerHTML = /*$purchasePrices*/ ctx[1][1];
+    			}
+
+    			if (dirty & /*$purchasePrices*/ 2 && to_number(input4.innerHTML) !== /*$purchasePrices*/ ctx[1][1] && /*$purchasePrices*/ ctx[1][1] !== input4.innerHTML) {
+    				input4.innerHTML = /*$purchasePrices*/ ctx[1][1];
+    			}
+
+    			if (dirty & /*$purchasePrices*/ 2 && input5_value_value !== (input5_value_value = /*$purchasePrices*/ ctx[1][2]) && input5.value !== input5_value_value) {
+    				prop_dev(input5, "value", input5_value_value);
+    			}
+
+    			if (dirty & /*$purchasePrices*/ 2 && to_number(input5.innerHTML) !== /*$purchasePrices*/ ctx[1][2] && /*$purchasePrices*/ ctx[1][2] !== input5.innerHTML) {
+    				input5.innerHTML = /*$purchasePrices*/ ctx[1][2];
+    			}
+
+    			if (dirty & /*$purchasePrices*/ 2 && to_number(input5.innerHTML) !== /*$purchasePrices*/ ctx[1][2] && /*$purchasePrices*/ ctx[1][2] !== input5.innerHTML) {
+    				input5.innerHTML = /*$purchasePrices*/ ctx[1][2];
     			}
     		},
     		i: noop$1,
@@ -6745,33 +6850,63 @@ var app = (function () {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<UserInput> was created with unknown prop '${key}'`);
     	});
 
-    	function td0_input_handler() {
-    		$sellingPrices[0] = this.innerHTML;
+    	function input0_input_handler() {
+    		$sellingPrices[0] = to_number(this.innerHTML);
     		sellingPrices.set($sellingPrices);
     	}
 
-    	function td1_input_handler() {
-    		$sellingPrices[1] = this.innerHTML;
+    	function input0_input_handler_1() {
+    		$sellingPrices[0] = to_number(this.innerHTML);
     		sellingPrices.set($sellingPrices);
     	}
 
-    	function td2_input_handler() {
-    		$sellingPrices[2] = this.innerHTML;
+    	function input1_input_handler() {
+    		$sellingPrices[1] = to_number(this.innerHTML);
     		sellingPrices.set($sellingPrices);
     	}
 
-    	function td3_input_handler() {
-    		$purchasePrices[0] = this.innerHTML;
+    	function input1_input_handler_1() {
+    		$sellingPrices[1] = to_number(this.innerHTML);
+    		sellingPrices.set($sellingPrices);
+    	}
+
+    	function input2_input_handler() {
+    		$sellingPrices[2] = to_number(this.innerHTML);
+    		sellingPrices.set($sellingPrices);
+    	}
+
+    	function input2_input_handler_1() {
+    		$sellingPrices[2] = to_number(this.innerHTML);
+    		sellingPrices.set($sellingPrices);
+    	}
+
+    	function input3_input_handler() {
+    		$purchasePrices[0] = to_number(this.innerHTML);
     		purchasePrices.set($purchasePrices);
     	}
 
-    	function td4_input_handler() {
-    		$purchasePrices[1] = this.innerHTML;
+    	function input3_input_handler_1() {
+    		$purchasePrices[0] = to_number(this.innerHTML);
     		purchasePrices.set($purchasePrices);
     	}
 
-    	function td5_input_handler() {
-    		$purchasePrices[2] = this.innerHTML;
+    	function input4_input_handler() {
+    		$purchasePrices[1] = to_number(this.innerHTML);
+    		purchasePrices.set($purchasePrices);
+    	}
+
+    	function input4_input_handler_1() {
+    		$purchasePrices[1] = to_number(this.innerHTML);
+    		purchasePrices.set($purchasePrices);
+    	}
+
+    	function input5_input_handler() {
+    		$purchasePrices[2] = to_number(this.innerHTML);
+    		purchasePrices.set($purchasePrices);
+    	}
+
+    	function input5_input_handler_1() {
+    		$purchasePrices[2] = to_number(this.innerHTML);
     		purchasePrices.set($purchasePrices);
     	}
 
@@ -6785,12 +6920,18 @@ var app = (function () {
     	return [
     		$sellingPrices,
     		$purchasePrices,
-    		td0_input_handler,
-    		td1_input_handler,
-    		td2_input_handler,
-    		td3_input_handler,
-    		td4_input_handler,
-    		td5_input_handler
+    		input0_input_handler,
+    		input0_input_handler_1,
+    		input1_input_handler,
+    		input1_input_handler_1,
+    		input2_input_handler,
+    		input2_input_handler_1,
+    		input3_input_handler,
+    		input3_input_handler_1,
+    		input4_input_handler,
+    		input4_input_handler_1,
+    		input5_input_handler,
+    		input5_input_handler_1
     	];
     }
 
@@ -6813,32 +6954,32 @@ var app = (function () {
 
     function get_each_context$7(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[8] = list[i];
-    	child_ctx[9] = list;
-    	child_ctx[10] = i;
+    	child_ctx[10] = list[i];
+    	child_ctx[11] = list;
+    	child_ctx[12] = i;
     	return child_ctx;
     }
 
     function get_each_context_1$3(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[11] = list[i];
-    	child_ctx[12] = list;
-    	child_ctx[13] = i;
+    	child_ctx[13] = list[i];
+    	child_ctx[14] = list;
+    	child_ctx[15] = i;
     	return child_ctx;
     }
 
     function get_each_context_2$2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[14] = list[i];
-    	child_ctx[15] = list;
-    	child_ctx[10] = i;
+    	child_ctx[16] = list[i];
+    	child_ctx[17] = list;
+    	child_ctx[12] = i;
     	return child_ctx;
     }
 
-    // (12:16) {#each customers as customer, i}
+    // (15:16) {#each customers as customer, i}
     function create_each_block_2$2(ctx) {
     	let th;
-    	let t0_value = /*customer*/ ctx[14] + "";
+    	let t0_value = /*customer*/ ctx[16] + "";
     	let t0;
     	let t1;
     	let p;
@@ -6847,7 +6988,7 @@ var app = (function () {
     	let dispose;
 
     	function p_input_handler() {
-    		/*p_input_handler*/ ctx[5].call(p, /*i*/ ctx[10]);
+    		/*p_input_handler*/ ctx[6].call(p, /*i*/ ctx[12]);
     	}
 
     	const block = {
@@ -6860,11 +7001,11 @@ var app = (function () {
     			t3 = text$1("\n                        )");
     			attr_dev(p, "class", "w-8 text-center");
     			attr_dev(p, "contenteditable", "true");
-    			if (/*$demand*/ ctx[2][/*i*/ ctx[10]] === void 0) add_render_callback$1(p_input_handler);
-    			add_location(p, file$5, 14, 24, 695);
+    			if (/*$demand*/ ctx[2][/*i*/ ctx[12]] === void 0) add_render_callback$1(p_input_handler);
+    			add_location(p, file$5, 17, 24, 826);
     			attr_dev(th, "scope", "col");
     			attr_dev(th, "class", "px-6 py-3 flex");
-    			add_location(th, file$5, 12, 20, 594);
+    			add_location(th, file$5, 15, 20, 725);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, th, anchor);
@@ -6872,8 +7013,8 @@ var app = (function () {
     			append_dev(th, t1);
     			append_dev(th, p);
 
-    			if (/*$demand*/ ctx[2][/*i*/ ctx[10]] !== void 0) {
-    				p.innerHTML = /*$demand*/ ctx[2][/*i*/ ctx[10]];
+    			if (/*$demand*/ ctx[2][/*i*/ ctx[12]] !== void 0) {
+    				p.innerHTML = /*$demand*/ ctx[2][/*i*/ ctx[12]];
     			}
 
     			append_dev(th, t3);
@@ -6885,10 +7026,10 @@ var app = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty & /*customers*/ 1 && t0_value !== (t0_value = /*customer*/ ctx[14] + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*customers*/ 1 && t0_value !== (t0_value = /*customer*/ ctx[16] + "")) set_data_dev(t0, t0_value);
 
-    			if (dirty & /*$demand*/ 4 && /*$demand*/ ctx[2][/*i*/ ctx[10]] !== p.innerHTML) {
-    				p.innerHTML = /*$demand*/ ctx[2][/*i*/ ctx[10]];
+    			if (dirty & /*$demand*/ 4 && /*$demand*/ ctx[2][/*i*/ ctx[12]] !== p.innerHTML) {
+    				p.innerHTML = /*$demand*/ ctx[2][/*i*/ ctx[12]];
     			}
     		},
     		d: function destroy(detaching) {
@@ -6902,14 +7043,14 @@ var app = (function () {
     		block,
     		id: create_each_block_2$2.name,
     		type: "each",
-    		source: "(12:16) {#each customers as customer, i}",
+    		source: "(15:16) {#each customers as customer, i}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (29:20) {#each customers as _, j}
+    // (32:20) {#each customers as _, j}
     function create_each_block_1$3(ctx) {
     	let td;
     	let input;
@@ -6917,7 +7058,7 @@ var app = (function () {
     	let dispose;
 
     	function input_input_handler() {
-    		/*input_input_handler*/ ctx[7].call(input, /*i*/ ctx[10], /*j*/ ctx[13]);
+    		/*input_input_handler*/ ctx[8].call(input, /*i*/ ctx[12], /*j*/ ctx[15]);
     	}
 
     	const block = {
@@ -6927,13 +7068,13 @@ var app = (function () {
     			attr_dev(input, "class", "px-3 py-2 h-full text-center");
     			attr_dev(input, "type", "number");
     			attr_dev(input, "contenteditable", "true");
-    			add_location(input, file$5, 30, 29, 1431);
-    			add_location(td, file$5, 29, 24, 1398);
+    			add_location(input, file$5, 33, 29, 1562);
+    			add_location(td, file$5, 32, 24, 1529);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, td, anchor);
     			append_dev(td, input);
-    			set_input_value(input, /*$transportCosts*/ ctx[4][/*i*/ ctx[10]][/*j*/ ctx[13]]);
+    			set_input_value(input, /*$transportCosts*/ ctx[4][/*i*/ ctx[12]][/*j*/ ctx[15]]);
 
     			if (!mounted) {
     				dispose = listen_dev(input, "input", input_input_handler);
@@ -6943,8 +7084,8 @@ var app = (function () {
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
 
-    			if (dirty & /*$transportCosts*/ 16 && to_number(input.value) !== /*$transportCosts*/ ctx[4][/*i*/ ctx[10]][/*j*/ ctx[13]]) {
-    				set_input_value(input, /*$transportCosts*/ ctx[4][/*i*/ ctx[10]][/*j*/ ctx[13]]);
+    			if (dirty & /*$transportCosts*/ 16 && to_number(input.value) !== /*$transportCosts*/ ctx[4][/*i*/ ctx[12]][/*j*/ ctx[15]]) {
+    				set_input_value(input, /*$transportCosts*/ ctx[4][/*i*/ ctx[12]][/*j*/ ctx[15]]);
     			}
     		},
     		d: function destroy(detaching) {
@@ -6958,18 +7099,18 @@ var app = (function () {
     		block,
     		id: create_each_block_1$3.name,
     		type: "each",
-    		source: "(29:20) {#each customers as _, j}",
+    		source: "(32:20) {#each customers as _, j}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (22:12) {#each suppliers as supplier, i}
+    // (25:12) {#each suppliers as supplier, i}
     function create_each_block$7(ctx) {
     	let tr;
     	let th;
-    	let t0_value = /*supplier*/ ctx[8] + "";
+    	let t0_value = /*supplier*/ ctx[10] + "";
     	let t0;
     	let t1;
     	let p;
@@ -6980,7 +7121,7 @@ var app = (function () {
     	let dispose;
 
     	function p_input_handler_1() {
-    		/*p_input_handler_1*/ ctx[6].call(p, /*i*/ ctx[10]);
+    		/*p_input_handler_1*/ ctx[7].call(p, /*i*/ ctx[12]);
     	}
 
     	let each_value_1 = /*customers*/ ctx[0];
@@ -7009,13 +7150,13 @@ var app = (function () {
     			t5 = space$1();
     			attr_dev(p, "class", "w-8 text-center");
     			attr_dev(p, "contenteditable", "true");
-    			if (/*$supply*/ ctx[3][/*i*/ ctx[10]] === void 0) add_render_callback$1(p_input_handler_1);
-    			add_location(p, file$5, 25, 24, 1192);
+    			if (/*$supply*/ ctx[3][/*i*/ ctx[12]] === void 0) add_render_callback$1(p_input_handler_1);
+    			add_location(p, file$5, 28, 24, 1323);
     			attr_dev(th, "scope", "row");
     			attr_dev(th, "class", "px-6 py-4 text-sm text-gray-700 bg-gray-50 whitespace-nowrap flex");
-    			add_location(th, file$5, 23, 20, 1040);
+    			add_location(th, file$5, 26, 20, 1171);
     			attr_dev(tr, "class", "bg-white border-b hover:bg-gray-50 flex");
-    			add_location(tr, file$5, 22, 16, 967);
+    			add_location(tr, file$5, 25, 16, 1098);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, tr, anchor);
@@ -7024,8 +7165,8 @@ var app = (function () {
     			append_dev(th, t1);
     			append_dev(th, p);
 
-    			if (/*$supply*/ ctx[3][/*i*/ ctx[10]] !== void 0) {
-    				p.innerHTML = /*$supply*/ ctx[3][/*i*/ ctx[10]];
+    			if (/*$supply*/ ctx[3][/*i*/ ctx[12]] !== void 0) {
+    				p.innerHTML = /*$supply*/ ctx[3][/*i*/ ctx[12]];
     			}
 
     			append_dev(th, t3);
@@ -7044,10 +7185,10 @@ var app = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty & /*suppliers*/ 2 && t0_value !== (t0_value = /*supplier*/ ctx[8] + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*suppliers*/ 2 && t0_value !== (t0_value = /*supplier*/ ctx[10] + "")) set_data_dev(t0, t0_value);
 
-    			if (dirty & /*$supply*/ 8 && /*$supply*/ ctx[3][/*i*/ ctx[10]] !== p.innerHTML) {
-    				p.innerHTML = /*$supply*/ ctx[3][/*i*/ ctx[10]];
+    			if (dirty & /*$supply*/ 8 && /*$supply*/ ctx[3][/*i*/ ctx[12]] !== p.innerHTML) {
+    				p.innerHTML = /*$supply*/ ctx[3][/*i*/ ctx[12]];
     			}
 
     			if (dirty & /*$transportCosts, customers*/ 17) {
@@ -7086,7 +7227,7 @@ var app = (function () {
     		block,
     		id: create_each_block$7.name,
     		type: "each",
-    		source: "(22:12) {#each suppliers as supplier, i}",
+    		source: "(25:12) {#each suppliers as supplier, i}",
     		ctx
     	});
 
@@ -7104,6 +7245,14 @@ var app = (function () {
     	let t3;
     	let t4;
     	let tbody;
+    	let t5;
+    	let button;
+    	let svg;
+    	let path;
+    	let t6;
+    	let span;
+    	let mounted;
+    	let dispose;
     	let each_value_2 = /*customers*/ ctx[0];
     	validate_each_argument(each_value_2);
     	let each_blocks_1 = [];
@@ -7144,20 +7293,41 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
+    			t5 = space$1();
+    			button = element$1("button");
+    			svg = svg_element$1("svg");
+    			path = svg_element$1("path");
+    			t6 = space$1();
+    			span = element$1("span");
+    			span.textContent = "Calculate";
     			attr_dev(h1, "class", "px-4 pt-2 text-2xl font-black");
-    			add_location(h1, file$5, 6, 4, 232);
+    			add_location(h1, file$5, 9, 4, 363);
     			attr_dev(th, "scope", "col");
     			attr_dev(th, "class", "px-6 py-3");
-    			add_location(th, file$5, 10, 16, 472);
+    			add_location(th, file$5, 13, 16, 603);
     			attr_dev(tr, "class", "flex");
-    			add_location(tr, file$5, 9, 12, 438);
+    			add_location(tr, file$5, 12, 12, 569);
     			attr_dev(thead, "class", "text-sm text-gray-700 uppercase bg-gray-50");
-    			add_location(thead, file$5, 8, 8, 367);
-    			add_location(tbody, file$5, 20, 8, 898);
+    			add_location(thead, file$5, 11, 8, 498);
+    			add_location(tbody, file$5, 23, 8, 1029);
     			attr_dev(table, "class", "w-full text-sm text-left text-gray-500");
-    			add_location(table, file$5, 7, 4, 304);
+    			add_location(table, file$5, 10, 4, 435);
+    			attr_dev(path, "stroke-linecap", "round");
+    			attr_dev(path, "stroke-linejoin", "round");
+    			attr_dev(path, "stroke-width", "2");
+    			attr_dev(path, "d", "M12 6v6m0 0v6m0-6h6m-6 0H6");
+    			add_location(path, file$5, 49, 13, 2324);
+    			attr_dev(svg, "class", "w-6 h-6");
+    			attr_dev(svg, "fill", "none");
+    			attr_dev(svg, "stroke", "currentColor");
+    			attr_dev(svg, "viewBox", "0 0 24 24");
+    			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
+    			add_location(svg, file$5, 48, 9, 2201);
+    			add_location(span, file$5, 55, 10, 2519);
+    			attr_dev(button, "class", "flex gap-1 items-center justify-end focus:bg-blue-700 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5");
+    			add_location(button, file$5, 45, 4, 1971);
     			attr_dev(div, "class", "relative overflow-x-auto shadow-md sm:rounded-lg w-full bg-white");
-    			add_location(div, file$5, 5, 0, 149);
+    			add_location(div, file$5, 8, 0, 280);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -7181,6 +7351,18 @@ var app = (function () {
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].m(tbody, null);
+    			}
+
+    			append_dev(div, t5);
+    			append_dev(div, button);
+    			append_dev(button, svg);
+    			append_dev(svg, path);
+    			append_dev(button, t6);
+    			append_dev(button, span);
+
+    			if (!mounted) {
+    				dispose = listen_dev(button, "click", /*submit*/ ctx[5], false, false, false);
+    				mounted = true;
     			}
     		},
     		p: function update(ctx, [dirty]) {
@@ -7238,6 +7420,8 @@ var app = (function () {
     			if (detaching) detach_dev(div);
     			destroy_each$1(each_blocks_1, detaching);
     			destroy_each$1(each_blocks, detaching);
+    			mounted = false;
+    			dispose();
     		}
     	};
 
@@ -7266,6 +7450,8 @@ var app = (function () {
     	validate_slots('TransportCostTable', slots, []);
     	let { customers } = $$props;
     	let { suppliers } = $$props;
+    	const dispatch = createEventDispatcher$1();
+    	const submit = () => dispatch('submit');
     	const writable_props = ['customers', 'suppliers'];
 
     	Object.keys($$props).forEach(key => {
@@ -7293,11 +7479,14 @@ var app = (function () {
     	};
 
     	$$self.$capture_state = () => ({
+    		createEventDispatcher: createEventDispatcher$1,
     		supply,
     		demand,
     		transportCosts,
     		customers,
     		suppliers,
+    		dispatch,
+    		submit,
     		$demand,
     		$supply,
     		$transportCosts
@@ -7318,6 +7507,7 @@ var app = (function () {
     		$demand,
     		$supply,
     		$transportCosts,
+    		submit,
     		p_input_handler,
     		p_input_handler_1,
     		input_input_handler
@@ -7371,126 +7561,88 @@ var app = (function () {
 
     function get_each_context$6(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[21] = list[i];
-    	child_ctx[23] = i;
+    	child_ctx[11] = list[i];
+    	child_ctx[13] = i;
     	return child_ctx;
     }
 
     function get_each_context_1$2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[24] = list[i];
-    	child_ctx[26] = i;
+    	child_ctx[14] = list[i];
+    	child_ctx[16] = i;
     	return child_ctx;
     }
 
     function get_each_context_2$1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[27] = list[i];
-    	child_ctx[23] = i;
+    	child_ctx[17] = list[i];
+    	child_ctx[13] = i;
     	return child_ctx;
     }
 
-    // (100:24) {#if _demand[i] !== $demand[i]}
-    function create_if_block_1$3(ctx) {
-    	let span;
-    	let t_value = /*_demand*/ ctx[5][/*i*/ ctx[23]] + "";
-    	let t;
-
-    	const block = {
-    		c: function create() {
-    			span = element$1("span");
-    			t = text$1(t_value);
-    			add_location(span, file$4, 100, 28, 3490);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, span, anchor);
-    			append_dev(span, t);
-    		},
-    		p: function update(ctx, dirty) {
-    			if (dirty & /*_demand*/ 32 && t_value !== (t_value = /*_demand*/ ctx[5][/*i*/ ctx[23]] + "")) set_data_dev(t, t_value);
-    		},
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(span);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_if_block_1$3.name,
-    		type: "if",
-    		source: "(100:24) {#if _demand[i] !== $demand[i]}",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    // (95:16) {#each _customers as customer, i}
+    // (14:16) {#each _customers as customer, i}
     function create_each_block_2$1(ctx) {
     	let th;
-    	let t0_value = /*customer*/ ctx[27] + "";
+    	let t0_value = /*customer*/ ctx[17] + "";
     	let t0;
     	let t1;
-    	let p;
+    	let strike;
 
-    	let t2_value = (/*$demand*/ ctx[1][/*i*/ ctx[23]]
-    	? /*$demand*/ ctx[1][/*i*/ ctx[23]]
-    	: /*_demand*/ ctx[5][/*i*/ ctx[23]]) + "";
+    	let t2_value = (/*$demand*/ ctx[1][/*i*/ ctx[13]]
+    	? /*$demand*/ ctx[1][/*i*/ ctx[13]]
+    	: /*_demand*/ ctx[7][/*i*/ ctx[13]]) + "";
 
     	let t2;
     	let t3;
+    	let span;
     	let t4;
-    	let if_block = /*_demand*/ ctx[5][/*i*/ ctx[23]] !== /*$demand*/ ctx[1][/*i*/ ctx[23]] && create_if_block_1$3(ctx);
+
+    	let t5_value = (/*_demand*/ ctx[7][/*i*/ ctx[13]]
+    	? /*_demand*/ ctx[7][/*i*/ ctx[13]]
+    	: '0') + "";
+
+    	let t5;
+    	let t6;
 
     	const block = {
     		c: function create() {
     			th = element$1("th");
     			t0 = text$1(t0_value);
     			t1 = text$1(" (\n                        ");
-    			p = element$1("p");
+    			strike = element$1("strike");
     			t2 = text$1(t2_value);
     			t3 = text$1("\n                        )\n                        ");
-    			if (if_block) if_block.c();
-    			t4 = space$1();
-    			attr_dev(p, "class", "w-8 text-center");
-    			add_location(p, file$4, 97, 24, 3310);
+    			span = element$1("span");
+    			t4 = text$1(" ");
+    			t5 = text$1(t5_value);
+    			t6 = space$1();
+    			attr_dev(strike, "class", "w-6 text-center");
+    			add_location(strike, file$4, 16, 24, 915);
+    			attr_dev(span, "class", "text-blue-600");
+    			add_location(span, file$4, 18, 24, 1045);
     			attr_dev(th, "scope", "col");
     			attr_dev(th, "class", "px-6 py-3 flex");
-    			add_location(th, file$4, 95, 20, 3209);
+    			add_location(th, file$4, 14, 20, 814);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, th, anchor);
     			append_dev(th, t0);
     			append_dev(th, t1);
-    			append_dev(th, p);
-    			append_dev(p, t2);
+    			append_dev(th, strike);
+    			append_dev(strike, t2);
     			append_dev(th, t3);
-    			if (if_block) if_block.m(th, null);
-    			append_dev(th, t4);
+    			append_dev(th, span);
+    			append_dev(span, t4);
+    			append_dev(span, t5);
+    			append_dev(th, t6);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*_customers*/ 4 && t0_value !== (t0_value = /*customer*/ ctx[27] + "")) set_data_dev(t0, t0_value);
-
-    			if (dirty & /*$demand, _demand*/ 34 && t2_value !== (t2_value = (/*$demand*/ ctx[1][/*i*/ ctx[23]]
-    			? /*$demand*/ ctx[1][/*i*/ ctx[23]]
-    			: /*_demand*/ ctx[5][/*i*/ ctx[23]]) + "")) set_data_dev(t2, t2_value);
-
-    			if (/*_demand*/ ctx[5][/*i*/ ctx[23]] !== /*$demand*/ ctx[1][/*i*/ ctx[23]]) {
-    				if (if_block) {
-    					if_block.p(ctx, dirty);
-    				} else {
-    					if_block = create_if_block_1$3(ctx);
-    					if_block.c();
-    					if_block.m(th, t4);
-    				}
-    			} else if (if_block) {
-    				if_block.d(1);
-    				if_block = null;
-    			}
+    			if (dirty & /*$demand*/ 2 && t2_value !== (t2_value = (/*$demand*/ ctx[1][/*i*/ ctx[13]]
+    			? /*$demand*/ ctx[1][/*i*/ ctx[13]]
+    			: /*_demand*/ ctx[7][/*i*/ ctx[13]]) + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(th);
-    			if (if_block) if_block.d();
     		}
     	};
 
@@ -7498,33 +7650,115 @@ var app = (function () {
     		block,
     		id: create_each_block_2$1.name,
     		type: "each",
-    		source: "(95:16) {#each _customers as customer, i}",
+    		source: "(14:16) {#each _customers as customer, i}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (114:24) {#if _supply[i] !== $supply[i]}
-    function create_if_block$4(ctx) {
-    	let span;
-    	let t_value = /*_supply*/ ctx[4][/*i*/ ctx[23]] + "";
-    	let t;
+    // (32:24) {:else}
+    function create_else_block$3(ctx) {
+    	let t0;
+    	let p;
+
+    	let t1_value = (/*$supply*/ ctx[2][/*i*/ ctx[13]]
+    	? /*$supply*/ ctx[2][/*i*/ ctx[13]]
+    	: /*_supply*/ ctx[6][/*i*/ ctx[13]]) + "";
+
+    	let t1;
+    	let t2;
 
     	const block = {
     		c: function create() {
-    			span = element$1("span");
-    			t = text$1(t_value);
-    			add_location(span, file$4, 114, 28, 4115);
+    			t0 = text$1("(\n                            ");
+    			p = element$1("p");
+    			t1 = text$1(t1_value);
+    			t2 = text$1("\n                            )");
+    			attr_dev(p, "class", "w-6 text-center");
+    			add_location(p, file$4, 33, 28, 1838);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, span, anchor);
-    			append_dev(span, t);
+    			insert_dev(target, t0, anchor);
+    			insert_dev(target, p, anchor);
+    			append_dev(p, t1);
+    			insert_dev(target, t2, anchor);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*_supply*/ 16 && t_value !== (t_value = /*_supply*/ ctx[4][/*i*/ ctx[23]] + "")) set_data_dev(t, t_value);
+    			if (dirty & /*$supply*/ 4 && t1_value !== (t1_value = (/*$supply*/ ctx[2][/*i*/ ctx[13]]
+    			? /*$supply*/ ctx[2][/*i*/ ctx[13]]
+    			: /*_supply*/ ctx[6][/*i*/ ctx[13]]) + "")) set_data_dev(t1, t1_value);
     		},
     		d: function destroy(detaching) {
+    			if (detaching) detach_dev(t0);
+    			if (detaching) detach_dev(p);
+    			if (detaching) detach_dev(t2);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block$3.name,
+    		type: "else",
+    		source: "(32:24) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (29:24) {#if _supply[i] !== $supply[i]}
+    function create_if_block$4(ctx) {
+    	let t0;
+    	let strike;
+
+    	let t1_value = (/*$supply*/ ctx[2][/*i*/ ctx[13]]
+    	? /*$supply*/ ctx[2][/*i*/ ctx[13]]
+    	: /*_supply*/ ctx[6][/*i*/ ctx[13]]) + "";
+
+    	let t1;
+    	let t2;
+    	let span;
+    	let t3;
+
+    	let t4_value = (/*_supply*/ ctx[6][/*i*/ ctx[13]]
+    	? /*_supply*/ ctx[6][/*i*/ ctx[13]]
+    	: '0') + "";
+
+    	let t4;
+
+    	const block = {
+    		c: function create() {
+    			t0 = text$1("(");
+    			strike = element$1("strike");
+    			t1 = text$1(t1_value);
+    			t2 = text$1(")\n                            ");
+    			span = element$1("span");
+    			t3 = text$1(" ");
+    			t4 = text$1(t4_value);
+    			attr_dev(strike, "class", "w-6 text-center");
+    			add_location(strike, file$4, 29, 29, 1566);
+    			attr_dev(span, "class", "text-blue-600");
+    			add_location(span, file$4, 30, 28, 1675);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, t0, anchor);
+    			insert_dev(target, strike, anchor);
+    			append_dev(strike, t1);
+    			insert_dev(target, t2, anchor);
+    			insert_dev(target, span, anchor);
+    			append_dev(span, t3);
+    			append_dev(span, t4);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*$supply*/ 4 && t1_value !== (t1_value = (/*$supply*/ ctx[2][/*i*/ ctx[13]]
+    			? /*$supply*/ ctx[2][/*i*/ ctx[13]]
+    			: /*_supply*/ ctx[6][/*i*/ ctx[13]]) + "")) set_data_dev(t1, t1_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(t0);
+    			if (detaching) detach_dev(strike);
+    			if (detaching) detach_dev(t2);
     			if (detaching) detach_dev(span);
     		}
     	};
@@ -7533,27 +7767,31 @@ var app = (function () {
     		block,
     		id: create_if_block$4.name,
     		type: "if",
-    		source: "(114:24) {#if _supply[i] !== $supply[i]}",
+    		source: "(29:24) {#if _supply[i] !== $supply[i]}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (118:20) {#each _customers as _, j}
+    // (38:20) {#each _customers as _, j}
     function create_each_block_1$2(ctx) {
     	let td;
     	let div;
     	let p0;
 
-    	let t0_value = (/*table*/ ctx[6][/*i*/ ctx[23]][/*j*/ ctx[26]].val
-    	? /*table*/ ctx[6][/*i*/ ctx[23]][/*j*/ ctx[26]].val
+    	let t0_value = (/*$solutionTable*/ ctx[3].length
+    	? /*$solutionTable*/ ctx[3][/*i*/ ctx[13]][/*j*/ ctx[16]].val
     	: 0) + "";
 
     	let t0;
     	let t1;
     	let p1;
-    	let t2_value = /*table*/ ctx[6][/*i*/ ctx[23]][/*j*/ ctx[26]].rest + "";
+
+    	let t2_value = (/*$solutionTable*/ ctx[3].length
+    	? /*$solutionTable*/ ctx[3][/*i*/ ctx[13]][/*j*/ ctx[16]].rest
+    	: '0') + "";
+
     	let t2;
 
     	const block = {
@@ -7566,13 +7804,13 @@ var app = (function () {
     			p1 = element$1("p");
     			t2 = text$1(t2_value);
     			attr_dev(p0, "class", "grid col-span-2");
-    			add_location(p0, file$4, 120, 32, 4394);
+    			add_location(p0, file$4, 40, 32, 2191);
     			attr_dev(p1, "class", "col-start-2");
-    			add_location(p1, file$4, 121, 32, 4497);
+    			add_location(p1, file$4, 43, 32, 2379);
     			attr_dev(div, "class", "grid grid-rows-2 grid-cols-2");
-    			add_location(div, file$4, 119, 28, 4319);
+    			add_location(div, file$4, 39, 28, 2116);
     			attr_dev(td, "class", "px-3 py-2");
-    			add_location(td, file$4, 118, 24, 4268);
+    			add_location(td, file$4, 38, 24, 2065);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, td, anchor);
@@ -7584,11 +7822,13 @@ var app = (function () {
     			append_dev(p1, t2);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*table*/ 64 && t0_value !== (t0_value = (/*table*/ ctx[6][/*i*/ ctx[23]][/*j*/ ctx[26]].val
-    			? /*table*/ ctx[6][/*i*/ ctx[23]][/*j*/ ctx[26]].val
+    			if (dirty & /*$solutionTable*/ 8 && t0_value !== (t0_value = (/*$solutionTable*/ ctx[3].length
+    			? /*$solutionTable*/ ctx[3][/*i*/ ctx[13]][/*j*/ ctx[16]].val
     			: 0) + "")) set_data_dev(t0, t0_value);
 
-    			if (dirty & /*table*/ 64 && t2_value !== (t2_value = /*table*/ ctx[6][/*i*/ ctx[23]][/*j*/ ctx[26]].rest + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*$solutionTable*/ 8 && t2_value !== (t2_value = (/*$solutionTable*/ ctx[3].length
+    			? /*$solutionTable*/ ctx[3][/*i*/ ctx[13]][/*j*/ ctx[16]].rest
+    			: '0') + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(td);
@@ -7599,32 +7839,31 @@ var app = (function () {
     		block,
     		id: create_each_block_1$2.name,
     		type: "each",
-    		source: "(118:20) {#each _customers as _, j}",
+    		source: "(38:20) {#each _customers as _, j}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (108:12) {#each _suppliers as supplier, i}
+    // (25:12) {#each _suppliers as supplier, i}
     function create_each_block$6(ctx) {
     	let tr;
     	let th;
-    	let t0_value = /*supplier*/ ctx[21] + "";
+    	let t0_value = /*supplier*/ ctx[11] + "";
     	let t0;
     	let t1;
-    	let p;
-
-    	let t2_value = (/*$supply*/ ctx[0][/*i*/ ctx[23]]
-    	? /*$supply*/ ctx[0][/*i*/ ctx[23]]
-    	: /*_supply*/ ctx[4][/*i*/ ctx[23]]) + "";
-
     	let t2;
     	let t3;
-    	let t4;
-    	let t5;
-    	let if_block = /*_supply*/ ctx[4][/*i*/ ctx[23]] !== /*$supply*/ ctx[0][/*i*/ ctx[23]] && create_if_block$4(ctx);
-    	let each_value_1 = /*_customers*/ ctx[2];
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*_supply*/ ctx[6][/*i*/ ctx[13]] !== /*$supply*/ ctx[2][/*i*/ ctx[13]]) return create_if_block$4;
+    		return create_else_block$3;
+    	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block = current_block_type(ctx);
+    	let each_value_1 = /*_customers*/ ctx[4];
     	validate_each_argument(each_value_1);
     	let each_blocks = [];
 
@@ -7637,65 +7876,50 @@ var app = (function () {
     			tr = element$1("tr");
     			th = element$1("th");
     			t0 = text$1(t0_value);
-    			t1 = text$1(" (\n                        ");
-    			p = element$1("p");
-    			t2 = text$1(t2_value);
-    			t3 = text$1("\n                        )\n                        ");
-    			if (if_block) if_block.c();
-    			t4 = space$1();
+    			t1 = space$1();
+    			if_block.c();
+    			t2 = space$1();
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].c();
     			}
 
-    			t5 = space$1();
-    			attr_dev(p, "class", "w-8 text-center");
-    			add_location(p, file$4, 111, 24, 3935);
+    			t3 = space$1();
     			attr_dev(th, "scope", "row");
     			attr_dev(th, "class", "px-6 py-4 text-sm text-gray-700 bg-gray-50 whitespace-nowrap flex");
-    			add_location(th, file$4, 109, 20, 3782);
+    			add_location(th, file$4, 26, 20, 1354);
     			attr_dev(tr, "class", "bg-white border-b hover:bg-gray-50 flex");
-    			add_location(tr, file$4, 108, 16, 3709);
+    			add_location(tr, file$4, 25, 16, 1281);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, tr, anchor);
     			append_dev(tr, th);
     			append_dev(th, t0);
     			append_dev(th, t1);
-    			append_dev(th, p);
-    			append_dev(p, t2);
-    			append_dev(th, t3);
-    			if (if_block) if_block.m(th, null);
-    			append_dev(tr, t4);
+    			if_block.m(th, null);
+    			append_dev(tr, t2);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].m(tr, null);
     			}
 
-    			append_dev(tr, t5);
+    			append_dev(tr, t3);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*_suppliers*/ 8 && t0_value !== (t0_value = /*supplier*/ ctx[21] + "")) set_data_dev(t0, t0_value);
+    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
+    				if_block.p(ctx, dirty);
+    			} else {
+    				if_block.d(1);
+    				if_block = current_block_type(ctx);
 
-    			if (dirty & /*$supply, _supply*/ 17 && t2_value !== (t2_value = (/*$supply*/ ctx[0][/*i*/ ctx[23]]
-    			? /*$supply*/ ctx[0][/*i*/ ctx[23]]
-    			: /*_supply*/ ctx[4][/*i*/ ctx[23]]) + "")) set_data_dev(t2, t2_value);
-
-    			if (/*_supply*/ ctx[4][/*i*/ ctx[23]] !== /*$supply*/ ctx[0][/*i*/ ctx[23]]) {
     				if (if_block) {
-    					if_block.p(ctx, dirty);
-    				} else {
-    					if_block = create_if_block$4(ctx);
     					if_block.c();
     					if_block.m(th, null);
     				}
-    			} else if (if_block) {
-    				if_block.d(1);
-    				if_block = null;
     			}
 
-    			if (dirty & /*table, _customers*/ 68) {
-    				each_value_1 = /*_customers*/ ctx[2];
+    			if (dirty & /*$solutionTable*/ 8) {
+    				each_value_1 = /*_customers*/ ctx[4];
     				validate_each_argument(each_value_1);
     				let i;
 
@@ -7707,7 +7931,7 @@ var app = (function () {
     					} else {
     						each_blocks[i] = create_each_block_1$2(child_ctx);
     						each_blocks[i].c();
-    						each_blocks[i].m(tr, t5);
+    						each_blocks[i].m(tr, t3);
     					}
     				}
 
@@ -7720,7 +7944,7 @@ var app = (function () {
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(tr);
-    			if (if_block) if_block.d();
+    			if_block.d();
     			destroy_each$1(each_blocks, detaching);
     		}
     	};
@@ -7729,7 +7953,7 @@ var app = (function () {
     		block,
     		id: create_each_block$6.name,
     		type: "each",
-    		source: "(108:12) {#each _suppliers as supplier, i}",
+    		source: "(25:12) {#each _suppliers as supplier, i}",
     		ctx
     	});
 
@@ -7746,14 +7970,14 @@ var app = (function () {
     	let span;
     	let t3;
     	let t4;
-    	let table_1;
+    	let table;
     	let thead;
     	let tr;
     	let th;
     	let t6;
     	let t7;
     	let tbody;
-    	let each_value_2 = /*_customers*/ ctx[2];
+    	let each_value_2 = /*_customers*/ ctx[4];
     	validate_each_argument(each_value_2);
     	let each_blocks_1 = [];
 
@@ -7761,7 +7985,7 @@ var app = (function () {
     		each_blocks_1[i] = create_each_block_2$1(get_each_context_2$1(ctx, each_value_2, i));
     	}
 
-    	let each_value = /*_suppliers*/ ctx[3];
+    	let each_value = /*_suppliers*/ ctx[5];
     	validate_each_argument(each_value);
     	let each_blocks = [];
 
@@ -7779,9 +8003,9 @@ var app = (function () {
     			p = element$1("p");
     			t2 = text$1("Total profit: ");
     			span = element$1("span");
-    			t3 = text$1(/*$totalProfit*/ ctx[7]);
+    			t3 = text$1(/*$totalProfit*/ ctx[0]);
     			t4 = space$1();
-    			table_1 = element$1("table");
+    			table = element$1("table");
     			thead = element$1("thead");
     			tr = element$1("tr");
     			th = element$1("th");
@@ -7800,25 +8024,25 @@ var app = (function () {
     			}
 
     			attr_dev(h1, "class", "px-4 pt-2 text-2xl font-black");
-    			add_location(h1, file$4, 87, 8, 2748);
+    			add_location(h1, file$4, 6, 8, 353);
     			attr_dev(span, "class", "font-normal");
-    			add_location(span, file$4, 88, 47, 2851);
+    			add_location(span, file$4, 7, 47, 456);
     			attr_dev(p, "class", "font-semibold");
-    			add_location(p, file$4, 88, 8, 2812);
+    			add_location(p, file$4, 7, 8, 417);
     			attr_dev(div0, "class", "flex justify-between mr-4 items-center");
-    			add_location(div0, file$4, 86, 4, 2687);
+    			add_location(div0, file$4, 5, 4, 292);
     			attr_dev(th, "scope", "col");
     			attr_dev(th, "class", "px-6 py-3");
-    			add_location(th, file$4, 93, 16, 3086);
+    			add_location(th, file$4, 12, 16, 691);
     			attr_dev(tr, "class", "flex");
-    			add_location(tr, file$4, 92, 12, 3052);
+    			add_location(tr, file$4, 11, 12, 657);
     			attr_dev(thead, "class", "text-sm text-gray-700 uppercase bg-gray-50");
-    			add_location(thead, file$4, 91, 8, 2981);
-    			add_location(tbody, file$4, 106, 8, 3639);
-    			attr_dev(table_1, "class", "w-full text-sm text-left text-gray-500");
-    			add_location(table_1, file$4, 90, 4, 2918);
+    			add_location(thead, file$4, 10, 8, 586);
+    			add_location(tbody, file$4, 23, 8, 1211);
+    			attr_dev(table, "class", "w-full text-sm text-left text-gray-500");
+    			add_location(table, file$4, 9, 4, 523);
     			attr_dev(div1, "class", "relative overflow-x-auto shadow-md sm:rounded-lg w-full bg-white");
-    			add_location(div1, file$4, 85, 0, 2604);
+    			add_location(div1, file$4, 4, 0, 209);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -7833,8 +8057,8 @@ var app = (function () {
     			append_dev(p, span);
     			append_dev(span, t3);
     			append_dev(div1, t4);
-    			append_dev(div1, table_1);
-    			append_dev(table_1, thead);
+    			append_dev(div1, table);
+    			append_dev(table, thead);
     			append_dev(thead, tr);
     			append_dev(tr, th);
     			append_dev(tr, t6);
@@ -7843,18 +8067,18 @@ var app = (function () {
     				each_blocks_1[i].m(tr, null);
     			}
 
-    			append_dev(table_1, t7);
-    			append_dev(table_1, tbody);
+    			append_dev(table, t7);
+    			append_dev(table, tbody);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].m(tbody, null);
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*$totalProfit*/ 128) set_data_dev(t3, /*$totalProfit*/ ctx[7]);
+    			if (dirty & /*$totalProfit*/ 1) set_data_dev(t3, /*$totalProfit*/ ctx[0]);
 
-    			if (dirty & /*_demand, $demand, _customers*/ 38) {
-    				each_value_2 = /*_customers*/ ctx[2];
+    			if (dirty & /*_demand, $demand, _customers*/ 146) {
+    				each_value_2 = /*_customers*/ ctx[4];
     				validate_each_argument(each_value_2);
     				let i;
 
@@ -7877,8 +8101,8 @@ var app = (function () {
     				each_blocks_1.length = each_value_2.length;
     			}
 
-    			if (dirty & /*_customers, table, _supply, $supply, _suppliers*/ 93) {
-    				each_value = /*_suppliers*/ ctx[3];
+    			if (dirty & /*_customers, $solutionTable, _supply, $supply, _suppliers*/ 124) {
+    				each_value = /*_suppliers*/ ctx[5];
     				validate_each_argument(each_value);
     				let i;
 
@@ -7923,198 +8147,61 @@ var app = (function () {
 
     function instance$f($$self, $$props, $$invalidate) {
     	let $totalProfit;
-    	let $transportCosts;
-    	let $purchasePrices;
-    	let $sellingPrices;
-    	let $supply;
     	let $demand;
-    	let $demandSolution;
-    	let $supplySolution;
+    	let $supply;
+    	let $solutionTable;
     	validate_store(totalProfit, 'totalProfit');
-    	component_subscribe$1($$self, totalProfit, $$value => $$invalidate(7, $totalProfit = $$value));
-    	validate_store(transportCosts, 'transportCosts');
-    	component_subscribe$1($$self, transportCosts, $$value => $$invalidate(8, $transportCosts = $$value));
-    	validate_store(purchasePrices, 'purchasePrices');
-    	component_subscribe$1($$self, purchasePrices, $$value => $$invalidate(9, $purchasePrices = $$value));
-    	validate_store(sellingPrices, 'sellingPrices');
-    	component_subscribe$1($$self, sellingPrices, $$value => $$invalidate(10, $sellingPrices = $$value));
-    	validate_store(supply, 'supply');
-    	component_subscribe$1($$self, supply, $$value => $$invalidate(0, $supply = $$value));
+    	component_subscribe$1($$self, totalProfit, $$value => $$invalidate(0, $totalProfit = $$value));
     	validate_store(demand, 'demand');
     	component_subscribe$1($$self, demand, $$value => $$invalidate(1, $demand = $$value));
-    	validate_store(demandSolution, 'demandSolution');
-    	component_subscribe$1($$self, demandSolution, $$value => $$invalidate(11, $demandSolution = $$value));
-    	validate_store(supplySolution, 'supplySolution');
-    	component_subscribe$1($$self, supplySolution, $$value => $$invalidate(12, $supplySolution = $$value));
+    	validate_store(supply, 'supply');
+    	component_subscribe$1($$self, supply, $$value => $$invalidate(2, $supply = $$value));
+    	validate_store(solutionTable, 'solutionTable');
+    	component_subscribe$1($$self, solutionTable, $$value => $$invalidate(3, $solutionTable = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('SolutionTable', slots, []);
-    	const { _customers, _suppliers } = $$props;
-    	const M = _suppliers.length;
-    	const N = _customers.length;
-    	let _supply = $supplySolution;
-    	let _demand = $demandSolution;
-    	const table = new Array(M).fill({ val: 0, rest: 0 }).map(() => new Array(N).fill({ val: 0, rest: 0 }));
-
-    	const fillTable = () => {
-    		for (let i = 0; i < M; i++) {
-    			for (let j = 0; j < N; j++) {
-    				const val = parseInt($sellingPrices[j]) - (parseInt($purchasePrices[i]) + $transportCosts[i][j]);
-    				$$invalidate(6, table[i][j] = { val, rest: 0 }, table);
-    			}
-    		}
-    	};
-
-    	const setFictionalOperators = () => {
-    		let supplySum = 0;
-    		let demandSum = 0;
-
-    		for (let i = 0; i < M; i++) {
-    			supplySum += parseInt(_supply[i]);
-    		}
-
-    		for (let i = 0; i < N; i++) {
-    			demandSum += parseInt(_demand[i]);
-    		}
-
-    		if (supplySum !== demandSum) {
-    			$$invalidate(2, _customers[N] = 'OF', _customers);
-    			$$invalidate(4, _supply[M] = demandSum.toString(), _supply);
-    			$$invalidate(3, _suppliers[M] = 'DF', _suppliers);
-    			$$invalidate(5, _demand[N] = supplySum.toString(), _demand);
-
-    			const row = [
-    				{ val: 0, rest: 0 },
-    				{ val: 0, rest: 0 },
-    				{ val: 0, rest: 0 },
-    				{ val: 0, rest: 0 }
-    			];
-
-    			table.push(row);
-
-    			table.map(row => {
-    				row[N] = { val: 0, rest: 0 };
-    			});
-
-    			setOptimalValues();
-    			set_store_value$1(totalProfit, $totalProfit = calculateProfit(), $totalProfit);
-    		}
-    	};
-
-    	const setOptimalValues = () => {
-    		const values = [];
-
-    		for (let i = 0; i < M + 1; i++) {
-    			for (let j = 0; j < N + 1; j++) {
-    				values.push({ item: table[i][j], i, j });
-    			}
-    		}
-
-    		values.sort((a, b) => b.item.val - a.item.val);
-
-    		values.forEach(val => {
-    			let { item, i, j } = val;
-
-    			let min = _supply[i] < _demand[j]
-    			? parseInt(_supply[i])
-    			: parseInt(_demand[j]);
-
-    			item.rest = min === 0 ? 'x' : min;
-    			$$invalidate(4, _supply[i] = (parseInt(_supply[i]) - min).toString(), _supply);
-    			$$invalidate(5, _demand[j] = (parseInt(_demand[j]) - min).toString(), _demand);
-    		});
-    	};
-
-    	const calculateProfit = () => {
-    		let profit = 0;
-
-    		table.forEach(row => {
-    			row.forEach(({ val, rest }) => {
-    				if (Number.isInteger(rest)) {
-    					profit += val * rest;
-    				}
-    			});
-    		});
-
-    		return profit;
-    	};
-
-    	const setAlfaBeta = () => {
-    		$$invalidate(2, _customers[M + 1] = 'A<sup>i</sup>', _customers);
-    		$$invalidate(3, _suppliers[N + 1] = 'B<sup>i</sup>', _suppliers);
-    	};
+    	const { _customers, _suppliers, _supply, _demand, initialSupply, initialDemand } = $$props;
 
     	$$self.$$set = $$new_props => {
-    		$$invalidate(20, $$props = assign$1(assign$1({}, $$props), exclude_internal_props$1($$new_props)));
+    		$$invalidate(10, $$props = assign$1(assign$1({}, $$props), exclude_internal_props$1($$new_props)));
     	};
 
     	$$self.$capture_state = () => ({
     		supply,
     		demand,
-    		supplySolution,
-    		demandSolution,
     		totalProfit,
-    		sellingPrices,
-    		purchasePrices,
-    		transportCosts,
+    		solutionTable,
     		_customers,
     		_suppliers,
-    		M,
-    		N,
     		_supply,
     		_demand,
-    		table,
-    		fillTable,
-    		setFictionalOperators,
-    		setOptimalValues,
-    		calculateProfit,
-    		setAlfaBeta,
+    		initialSupply,
+    		initialDemand,
     		$totalProfit,
-    		$transportCosts,
-    		$purchasePrices,
-    		$sellingPrices,
-    		$supply,
     		$demand,
-    		$demandSolution,
-    		$supplySolution
+    		$supply,
+    		$solutionTable
     	});
 
     	$$self.$inject_state = $$new_props => {
-    		$$invalidate(20, $$props = assign$1(assign$1({}, $$props), $$new_props));
-    		if ('_supply' in $$props) $$invalidate(4, _supply = $$new_props._supply);
-    		if ('_demand' in $$props) $$invalidate(5, _demand = $$new_props._demand);
+    		$$invalidate(10, $$props = assign$1(assign$1({}, $$props), $$new_props));
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*$transportCosts*/ 256) {
-    			{
-    				fillTable();
-    			}
-    		}
-
-    		if ($$self.$$.dirty & /*$demand, $supply*/ 3) {
-    			{
-    				console.log($demand, $supply);
-    				setFictionalOperators();
-    			}
-    		}
-    	};
-
     	$$props = exclude_internal_props$1($$props);
 
     	return [
-    		$supply,
+    		$totalProfit,
     		$demand,
+    		$supply,
+    		$solutionTable,
     		_customers,
     		_suppliers,
     		_supply,
-    		_demand,
-    		table,
-    		$totalProfit,
-    		$transportCosts
+    		_demand
     	];
     }
 
@@ -21698,16 +21785,20 @@ var app = (function () {
 
     	transportcosttable = new TransportCostTable({
     			props: {
-    				customers: /*customers*/ ctx[1],
-    				suppliers: /*suppliers*/ ctx[0]
+    				customers: /*customers*/ ctx[5],
+    				suppliers: /*suppliers*/ ctx[4]
     			},
     			$$inline: true
     		});
 
+    	transportcosttable.$on("submit", /*calculate*/ ctx[6]);
+
     	solutiontable = new SolutionTable({
     			props: {
-    				_customers: /*_customers*/ ctx[3],
-    				_suppliers: /*_suppliers*/ ctx[2]
+    				_customers: /*_customers*/ ctx[1],
+    				_suppliers: /*_suppliers*/ ctx[0],
+    				_supply: /*_supply*/ ctx[3],
+    				_demand: /*_demand*/ ctx[2]
     			},
     			$$inline: true
     		});
@@ -21722,9 +21813,9 @@ var app = (function () {
     			t1 = space$1();
     			create_component$1(solutiontable.$$.fragment);
     			attr_dev(div, "class", "flex gap-5");
-    			add_location(div, file, 9, 4, 362);
+    			add_location(div, file, 89, 4, 3005);
     			attr_dev(main, "class", "container mx-auto grid gap-5 h-[calc(100%-8rem)] grid-rows-[minmax(50px,_auto)_1fr]");
-    			add_location(main, file, 7, 0, 241);
+    			add_location(main, file, 87, 0, 2884);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -21739,7 +21830,14 @@ var app = (function () {
     			mount_component$1(solutiontable, div, null);
     			current = true;
     		},
-    		p: noop$1,
+    		p: function update(ctx, [dirty]) {
+    			const solutiontable_changes = {};
+    			if (dirty & /*_customers*/ 2) solutiontable_changes._customers = /*_customers*/ ctx[1];
+    			if (dirty & /*_suppliers*/ 1) solutiontable_changes._suppliers = /*_suppliers*/ ctx[0];
+    			if (dirty & /*_supply*/ 8) solutiontable_changes._supply = /*_supply*/ ctx[3];
+    			if (dirty & /*_demand*/ 4) solutiontable_changes._demand = /*_demand*/ ctx[2];
+    			solutiontable.$set(solutiontable_changes);
+    		},
     		i: function intro(local) {
     			if (current) return;
     			transition_in$1(userinput.$$.fragment, local);
@@ -21773,12 +21871,135 @@ var app = (function () {
     }
 
     function instance$1($$self, $$props, $$invalidate) {
+    	let _supply;
+    	let _demand;
+    	let $totalProfit;
+    	let $solutionTable;
+    	let $demand;
+    	let $supply;
+    	let $transportCosts;
+    	let $purchasePrices;
+    	let $sellingPrices;
+    	validate_store(totalProfit, 'totalProfit');
+    	component_subscribe$1($$self, totalProfit, $$value => $$invalidate(9, $totalProfit = $$value));
+    	validate_store(solutionTable, 'solutionTable');
+    	component_subscribe$1($$self, solutionTable, $$value => $$invalidate(10, $solutionTable = $$value));
+    	validate_store(demand, 'demand');
+    	component_subscribe$1($$self, demand, $$value => $$invalidate(7, $demand = $$value));
+    	validate_store(supply, 'supply');
+    	component_subscribe$1($$self, supply, $$value => $$invalidate(8, $supply = $$value));
+    	validate_store(transportCosts, 'transportCosts');
+    	component_subscribe$1($$self, transportCosts, $$value => $$invalidate(11, $transportCosts = $$value));
+    	validate_store(purchasePrices, 'purchasePrices');
+    	component_subscribe$1($$self, purchasePrices, $$value => $$invalidate(12, $purchasePrices = $$value));
+    	validate_store(sellingPrices, 'sellingPrices');
+    	component_subscribe$1($$self, sellingPrices, $$value => $$invalidate(13, $sellingPrices = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Tp', slots, []);
     	let suppliers = ['D1', 'D2'];
     	let customers = ['O1', 'O2', 'O3'];
     	let _suppliers = ['D1', 'D2'];
     	let _customers = ['O1', 'O2', 'O3'];
+    	let initialSupply, initialDemand;
+    	const M = _suppliers.length;
+    	const N = _customers.length;
+
+    	const fillTable = () => {
+    		set_store_value$1(solutionTable, $solutionTable = new Array(M).fill({ val: 0, rest: 0 }).map(() => new Array(N).fill({ val: 0, rest: 0 })), $solutionTable);
+
+    		for (let i = 0; i < M; i++) {
+    			for (let j = 0; j < N; j++) {
+    				const val = parseInt($sellingPrices[j]) - (parseInt($purchasePrices[i]) + $transportCosts[i][j]);
+    				set_store_value$1(solutionTable, $solutionTable[i][j] = { val, rest: 0 }, $solutionTable);
+    			}
+    		}
+    	};
+
+    	const setFictionalOperators = () => {
+    		let supplySum = 0;
+    		let demandSum = 0;
+
+    		for (let i = 0; i < M; i++) {
+    			supplySum += parseInt($supply[i]);
+    		}
+
+    		for (let i = 0; i < N; i++) {
+    			demandSum += parseInt($demand[i]);
+    		}
+
+    		if (supplySum !== demandSum) {
+    			$$invalidate(1, _customers[N] = 'OF', _customers);
+    			$$invalidate(3, _supply[M] = demandSum.toString(), _supply);
+    			set_store_value$1(supply, $supply[M] = demandSum.toString(), $supply);
+    			$$invalidate(0, _suppliers[M] = 'DF', _suppliers);
+    			$$invalidate(2, _demand[N] = supplySum.toString(), _demand);
+    			set_store_value$1(demand, $demand[N] = supplySum.toString(), $demand);
+
+    			const row = [
+    				{ val: 0, rest: 0 },
+    				{ val: 0, rest: 0 },
+    				{ val: 0, rest: 0 },
+    				{ val: 0, rest: 0 }
+    			];
+
+    			$solutionTable.push(row);
+
+    			$solutionTable.map(row => {
+    				row[N] = { val: 0, rest: 0 };
+    			});
+    		}
+    	};
+
+    	const setOptimalValues = () => {
+    		const values = [];
+
+    		for (let i = 0; i < M + 1; i++) {
+    			for (let j = 0; j < N + 1; j++) {
+    				values.push({ item: $solutionTable[i][j], i, j });
+    			}
+    		}
+
+    		values.sort((a, b) => b.item.val - a.item.val);
+
+    		values.forEach(val => {
+    			let { item, i, j } = val;
+
+    			let min = $supply[i] < $demand[j]
+    			? parseInt(_supply[i])
+    			: parseInt(_demand[j]);
+
+    			item.rest = min === 0 ? 'x' : min;
+    			$$invalidate(3, _supply[i] = (parseInt(_supply[i]) - min).toString(), _supply);
+    			$$invalidate(2, _demand[j] = (parseInt(_demand[j]) - min).toString(), _demand);
+    		});
+    	};
+
+    	const calculateProfit = () => {
+    		let profit = 0;
+
+    		$solutionTable.forEach(row => {
+    			row.forEach(({ val, rest }) => {
+    				if (Number.isInteger(rest)) {
+    					profit += val * rest;
+    				}
+    			});
+    		});
+
+    		return profit;
+    	};
+
+    	const setAlfaBeta = () => {
+    		$$invalidate(1, _customers[M + 1] = 'A<sup>i</sup>', _customers);
+    		$$invalidate(0, _suppliers[N + 1] = 'B<sup>i</sup>', _suppliers);
+    	};
+
+    	const calculate = () => {
+    		fillTable();
+    		setFictionalOperators();
+    		setOptimalValues();
+    		set_store_value$1(totalProfit, $totalProfit = calculateProfit(), $totalProfit);
+    	};
+
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
@@ -21786,27 +22007,77 @@ var app = (function () {
     	});
 
     	$$self.$capture_state = () => ({
+    		supply,
+    		demand,
+    		solutionTable,
+    		totalProfit,
+    		sellingPrices,
+    		purchasePrices,
+    		transportCosts,
     		UserInput,
     		TransportCostTable,
     		SolutionTable,
     		suppliers,
     		customers,
     		_suppliers,
-    		_customers
+    		_customers,
+    		initialSupply,
+    		initialDemand,
+    		M,
+    		N,
+    		fillTable,
+    		setFictionalOperators,
+    		setOptimalValues,
+    		calculateProfit,
+    		setAlfaBeta,
+    		calculate,
+    		_demand,
+    		_supply,
+    		$totalProfit,
+    		$solutionTable,
+    		$demand,
+    		$supply,
+    		$transportCosts,
+    		$purchasePrices,
+    		$sellingPrices
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('suppliers' in $$props) $$invalidate(0, suppliers = $$props.suppliers);
-    		if ('customers' in $$props) $$invalidate(1, customers = $$props.customers);
-    		if ('_suppliers' in $$props) $$invalidate(2, _suppliers = $$props._suppliers);
-    		if ('_customers' in $$props) $$invalidate(3, _customers = $$props._customers);
+    		if ('suppliers' in $$props) $$invalidate(4, suppliers = $$props.suppliers);
+    		if ('customers' in $$props) $$invalidate(5, customers = $$props.customers);
+    		if ('_suppliers' in $$props) $$invalidate(0, _suppliers = $$props._suppliers);
+    		if ('_customers' in $$props) $$invalidate(1, _customers = $$props._customers);
+    		if ('initialSupply' in $$props) initialSupply = $$props.initialSupply;
+    		if ('initialDemand' in $$props) initialDemand = $$props.initialDemand;
+    		if ('_demand' in $$props) $$invalidate(2, _demand = $$props._demand);
+    		if ('_supply' in $$props) $$invalidate(3, _supply = $$props._supply);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [suppliers, customers, _suppliers, _customers];
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*$supply*/ 256) {
+    			$$invalidate(3, _supply = $supply.map(supply => supply));
+    		}
+
+    		if ($$self.$$.dirty & /*$demand*/ 128) {
+    			$$invalidate(2, _demand = $demand.map(demand => demand));
+    		}
+    	};
+
+    	return [
+    		_suppliers,
+    		_customers,
+    		_demand,
+    		_supply,
+    		suppliers,
+    		customers,
+    		calculate,
+    		$demand,
+    		$supply
+    	];
     }
 
     class Tp extends SvelteComponentDev {
