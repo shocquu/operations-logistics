@@ -3,10 +3,6 @@
 
     export let customers;
     export let suppliers;
-
-    // $: {
-    //     console.table($transportCosts);
-    // }
 </script>
 
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full bg-white">
