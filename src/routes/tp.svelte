@@ -21,19 +21,30 @@
         j: number;
     }
 
-    let suppliers = ['D1', 'D2'];
-    let customers = ['O1', 'O2', 'O3'];
-    let _suppliers = ['D1', 'D2'];
-    let _customers = ['O1', 'O2', 'O3'];
-    let initialSupply, initialDemand;
+    let suppliers = ['S1', 'S2'];
+    let customers = ['C1', 'C2'];
+    let _customers = [...customers];
+    let _suppliers = [...suppliers];
 
     $: _supply = $supply.map((supply) => supply);
     $: _demand = $demand.map((demand) => demand);
 
-    const M: number = _suppliers.length;
-    const N: number = _customers.length;
+    let M: number = suppliers.length;
+    let N: number = customers.length;
+
+    $: {
+        customers || suppliers, fillTable();
+    }
 
     const fillTable = () => {
+        M = suppliers.length;
+        N = customers.length;
+
+        const newRow = new Array(N).fill(0);
+        $transportCosts.map((tc) => {
+            tc.push(0);
+        });
+        $transportCosts = [...$transportCosts, newRow];
         $solutionTable = new Array(M).fill({ val: 0, rest: 0 }).map(() => new Array(N).fill({ val: 0, rest: 0 }));
 
         for (let i = 0; i < M; i++) {
@@ -57,21 +68,16 @@
         }
 
         if (supplySum !== demandSum) {
-            _customers[N] = 'OF';
+            _customers[N] = 'FC';
             _supply[M] = demandSum.toString();
             $supply[M] = demandSum.toString();
 
-            _suppliers[M] = 'DF';
+            _suppliers[M] = 'FS';
             _demand[N] = supplySum.toString();
             $demand[N] = supplySum.toString();
 
-            const row = [
-                { val: 0, rest: 0 },
-                { val: 0, rest: 0 },
-                { val: 0, rest: 0 },
-                { val: 0, rest: 0 },
-            ];
-            $solutionTable.push(row);
+            const newRow = new Array(N).fill({ val: 0, rest: 0 });
+            $solutionTable.push(newRow);
             $solutionTable.map((row) => {
                 row[N] = { val: 0, rest: 0 };
             });
@@ -112,9 +118,14 @@
         return profit;
     };
 
-    const setAlfaBeta = () => {
-        _customers[M + 1] = 'A<sup>i</sup>';
-        _suppliers[N + 1] = 'B<sup>i</sup>';
+    const addColumn = () => {
+        customers = [...customers, `C${customers.length + 1}`];
+        _customers = [..._customers, `C${_customers.length + 1}`];
+    };
+
+    const addRow = () => {
+        suppliers = [...suppliers, `S${suppliers.length + 1}`];
+        _suppliers = [..._suppliers, `S${_suppliers.length + 1}`];
     };
 
     const calculate = () => {
@@ -126,9 +137,11 @@
     };
 </script>
 
-<main class="container mx-auto grid gap-5 h-[calc(100%-8rem)] grid-rows-[minmax(50px,_auto)_1fr]">
-    <UserInput />
-    <div class="flex gap-5">
+<main
+    class="container mx-auto grid gap-5 2xl:h-[calc(100%-8rem)] md:h-[calc(100%-6rem)] grid-rows-[minmax(50px,_auto)_1fr]"
+>
+    <UserInput {customers} {suppliers} on:addColumn={addColumn} on:addRow={addRow} />
+    <div class="flex gap-5 h-max">
         <TransportCostTable {customers} {suppliers} on:submit={calculate} />
         <SolutionTable {_customers} {_suppliers} {_supply} {_demand} />
     </div>
