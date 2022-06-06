@@ -22,7 +22,7 @@
     }
 
     let suppliers = ['S1', 'S2'];
-    let customers = ['C1', 'C2'];
+    let customers = ['C1', 'C2', 'C3'];
     let _customers = [...customers];
     let _suppliers = [...suppliers];
 
