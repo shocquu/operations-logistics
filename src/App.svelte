@@ -1,19 +1,19 @@
 <script lang="ts">
-    import { Router, Route, Link } from 'svelte-navigator';
+    import { Router, Route } from 'svelte-navigator';
     import { Nav } from './components';
-    import CriticalPAthMethod from './routes/cpm.svelte';
+    import CriticalPathMethod from './routes/cpm.svelte';
     import TransportationProblem from './routes/tp.svelte';
 </script>
 
-<Router>
+<Router basepath="/operations-logistics">
     <Nav />
-    <Route path="tp">
-        <CriticalPAthMethod />
-    </Route>
-    <Route path="cpm">
-        <CriticalPAthMethod />
-    </Route>
     <Route path="/">
+        <TransportationProblem />
+    </Route>
+    <Route path="/cpm">
+        <CriticalPathMethod />
+    </Route>
+    <Route path="/tp">
         <TransportationProblem />
     </Route>
 </Router>
